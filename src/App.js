@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { PathContext } from './utils/Store';
+
+import Routes from './utils/Routes'
+
+export default () => {
+	const [, setPath] = useContext(PathContext)
+	return (
+		<div>
+			<button onClick={() => {
+				setPath('/')
+			}}>1</button>
+			<button onClick={() => {
+				setPath('/about')
+			}}>2</button>
+			<button onClick={() => {
+				setPath('/ASD')
+			}}>3</button>
+			<Routes />
+		</div>
+
+	);
 }
 
-export default App;
+
+
+
+
+/**
+ *
+ * Old
+ *
+ */
+// import logo from './logo.svg';
+// import './App.css';
+
+// import HomePage from './components/home';
+
+// function App() {
+//   return (
+//     <div className="App">
+//       <HomePage />
+//     </div>
+//   );
+// }
+
+// export default App;
