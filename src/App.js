@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 
-import { PathContext } from './utils/Store';
+import { PathContext } from './store/Context';
 
-import Routes from './utils/Routes'
+import Routes from './Routes'
 
 export default () => {
 	const [, setPath] = useContext(PathContext)
@@ -22,27 +22,3 @@ export default () => {
 
 	);
 }
-
-
-
-
-
-/**
- *
- * Old
- *
- */
-// import logo from './logo.svg';
-// import './App.css';
-
-// import HomePage from './components/home';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <HomePage />
-//     </div>
-//   );
-// }
-
-// export default App;

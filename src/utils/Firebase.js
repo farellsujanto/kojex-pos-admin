@@ -1,18 +1,16 @@
 import * as firebase from 'firebase';
 
 let config = {
-    apiKey: "AIzaSyDCsR0Vblguy17fkHDFyhGS0L14zuXnqW8",
-    authDomain: "reavern-tech.firebaseapp.com",
-    databaseURL: "https://reavern-tech.firebaseio.com",
-    projectId: "reavern-tech",
-    storageBucket: "reavern-tech.appspot.com",
-    messagingSenderId: "492974507286",
-    appId: "1:492974507286:web:7a19fd2f3292eb2f"
+    apiKey: "AIzaSyBaGDygm6e6XYpAF0QVbiWr86cuB_AwzVg",
+    authDomain: "company-management-a007f.firebaseapp.com",
+    databaseURL: "https://company-management-a007f.firebaseio.com",
+    projectId: "company-management-a007f",
+    storageBucket: "company-management-a007f.appspot.com",
+    messagingSenderId: "72804554904",
+    appId: "1:72804554904:web:5265cf4cdb679bdd46d8ed",
+    measurementId: "G-NB4DDJNDZ7"
 };
 
-let firebaseApp, secondaryApp;
+let firebaseApp = !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
 
-firebaseApp = !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
-secondaryApp = firebase.apps.length < 2 ? firebase.initializeApp(config, "Secondary")  : firebase.app("Secondary");
-
-export { firebaseApp, secondaryApp } ;
+export { firebaseApp };
