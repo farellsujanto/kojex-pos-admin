@@ -1,24 +1,31 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
-import { PathContext } from './store/Context';
+import Routes from './Routes';
+import Drawer from './components/Drawer';
+import NavbarComponent from './components/NavbarComponent';
 
-import Routes from './Routes'
+import { Container, Row, Col, Jumbotron } from 'react-bootstrap';
 
 export default () => {
-	const [, setPath] = useContext(PathContext)
-	return (
-		<div>
-			<button onClick={() => {
-				setPath('/')
-			}}>1</button>
-			<button onClick={() => {
-				setPath('/about')
-			}}>2</button>
-			<button onClick={() => {
-				setPath('/ASD')
-			}}>3</button>
-			<Routes />
-		</div>
 
+	return (
+		<Container>
+			<Row>
+				<Col sm={3}>
+					<Drawer />
+				</Col>
+				<Col sm={9}>
+					<Col sm={12}>
+						<NavbarComponent />
+						<br />
+					</Col>
+					<Col sm={12}>
+						<Jumbotron>
+							<Routes />
+						</Jumbotron>
+					</Col>
+				</Col>
+			</Row>
+		</Container>
 	);
 }

@@ -1,9 +1,10 @@
 import React from 'react';
 
 export default () => {
-    return(
+    return (
         <div>
-            HOME
+            AAA
         </div>
+
     );
 }
