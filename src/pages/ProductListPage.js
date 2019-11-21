@@ -1,10 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { firebaseApp } from '../utils/Firebase';
 
 import NotificationModal from '../components/NotificationModal';
 
-import { Container, Row, Col, Form, Button, Table, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Table, Modal, InputGroup, Dropdown, DropdownButton, Spinner } from 'react-bootstrap';
+
+function FormComponent({ type, title, placeholder, changeListener }) {
+    return (
+        <Form.Group>
+            <Form.Label>{title}</Form.Label>
+            <Form.Control
+                type={type}
+                placeholder={placeholder}
+                onChange={(e) => changeListener(e.target.value)} />
+        </Form.Group>
+    );
+}
 
 function AddItemModal({ show, handleClose }) {
+
+    const UNITS = ["kg", "box", "pcs"];
+
+    const [itemId, setItemId] = useState('');
+    const [itemName, setItemName] = useState('');
+    const [price, setPrice] = useState(0);
+    const [markup, setMarkup] = useState(0);
+    const [currentUnit, setCurrentUnit] = useState('');
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    async function addItem() {
+        if (
+            itemId === '' &&
+            itemName === '' &&
+            price === 0 &&
+            markup === 0 &&
+            currentUnit === ''
+        ) {
+            window.alert("Tolong isi semua kolom yang kosong");
+            return;
+        }
+
+        const item = {
+            itemId: itemId,
+            itemName: itemName,
+            price: price,
+            markup: markup,
+            currentUnit: currentUnit,
+        }
+
+        setIsLoading(true);
+
+        const isIdDuplicate = await checkForDuplicateIds(itemId);
+        if (!isIdDuplicate) {
+            saveItemToDb(item);
+        } else {
+            setIsLoading(false);
+            window.alert("Id sudah terdaftar, silahkan masukan Id yang lain");
+        }
+    }
+
+    async function checkForDuplicateIds(itemId) {
+        const item = await firebaseApp.firestore()
+            .collection("company")
+            .doc("First")
+            .collection("items")
+            .doc(itemId)
+            .get();
+
+        return item.exists;
+    }
+
+    function saveItemToDb(item) {
+        firebaseApp.firestore()
+            .collection("company")
+            .doc("First")
+            .collection("items")
+            .doc(item.itemId)
+            .set(item, { merge: true })
+            .then(() => {
+                window.alert("Barang telah berhasil ditambah")
+                setIsLoading(false);
+                handleClose();
+            }).catch((e) => {
+                console.log(e);
+                window.alert("Terjadi kesalahan silahkan coba lagi")
+                setIsLoading(false);
+            });
+    }
+
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -12,30 +96,107 @@ function AddItemModal({ show, handleClose }) {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form.Group>
-                        <Form.Label>Nama Barang</Form.Label>
-                        <Form.Control type="text" placeholder="Wortel" />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Nama Harga</Form.Label>
-                        <Form.Control type="number" placeholder="10000" />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Mark Up</Form.Label>
-                        <Form.Control type="number" placeholder="20" />
-                    </Form.Group>
+                    <FormComponent
+                        title="Id Barang"
+                        type="text"
+                        placeholder="001 ABC"
+                        changeListener={setItemId}
+                    />
+                    <FormComponent
+                        title="Nama Barang"
+                        type="text"
+                        placeholder="Wortel"
+                        changeListener={setItemName}
+                    />
+                    <FormComponent
+                        title="Harga"
+                        type="number"
+                        placeholder="10000"
+                        changeListener={setPrice}
+                    />
 
+                    <InputGroup className="mb-3">
+                        <DropdownButton
+                            variant="outline-secondary"
+                            title="Satuan"
+                            id="input-group-dropdown-1"
+                        >
+                            {
+                                UNITS.map((unit) => {
+                                    return <Dropdown.Item
+                                        key={unit}
+                                        onClick={(_) => setCurrentUnit(unit)} >
+                                        {unit}
+                                    </Dropdown.Item>
+                                })
+                            }
+                        </DropdownButton>
+                        <Form.Control aria-describedby="basic-addon1" value={currentUnit} readOnly />
+                    </InputGroup>
+                    <FormComponent
+                        title="Mark Up"
+                        type="number"
+                        placeholder="20"
+                        changeListener={setMarkup}
+                    />
                 </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="link" onClick={handleClose}>
                     Tutup
                     </Button>
-                <Button variant="primary" onClick={handleClose}>
-                    Tambah
-                    </Button>
+                <Button
+                    variant="primary"
+                    onClick={addItem}
+                    disabled={isLoading}>
+                    {
+                        !isLoading ? "Tambah" :
+                            (
+                                <>
+                                    <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
+                                    {' '}Loading...
+                                </>
+                            )
+
+                    }
+                </Button>
             </Modal.Footer>
         </Modal>
+    );
+}
+
+function ItemTableRowComponent({ itemData }) {
+
+    function formatNumber(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function deleteItemFromDb() {
+        firebaseApp.firestore()
+            .collection("company")
+            .doc("First")
+            .collection("items")
+            .doc(itemData.itemId)
+            .delete();
+    }
+
+    return (
+        <tr key={itemData.itemId}>
+            <td>{itemData.itemId}</td>
+            <td>{itemData.itemName}</td>
+            <td>{formatNumber(itemData.price)}</td>
+            <td>{itemData.markup} %</td>
+            <td>{formatNumber(Number(itemData.price) * (100 + Number(itemData.markup)) / 100)}</td>
+            <td>
+                <Button onClick={deleteItemFromDb} variant="danger" block>Delete</Button>
+            </td>
+        </tr>
     );
 }
 
@@ -44,8 +205,25 @@ export default () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showNotification, setShowNotification] = useState(false);
 
+    const [itemDatas, setItemDatas] = useState([]);
+
     const handleClose = () => setShowAddModal(false);
     const handleShow = () => setShowAddModal(true);
+
+    useEffect(() => {
+        const unsubscribe = firebaseApp.firestore()
+            .collection("company")
+            .doc("First")
+            .collection("items").onSnapshot((snapshot) => {
+                let newItems = [];
+                snapshot.forEach((snap) => {
+                    newItems.push(snap.data());
+                });
+                setItemDatas(newItems);
+            });
+
+        return () => unsubscribe();
+    }, [])
 
     return (
         <Container>
@@ -71,27 +249,27 @@ export default () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>001</td>
-                        <td>Wortel</td>
-                        <td>10.000</td>
-                        <td>40%</td>
-                        <td>14.000</td>
-                        <td>
-                            <Button variant="danger" block>Delete</Button>
-                        </td>
-                    </tr>
+                    {
+                        itemDatas ?
+                            itemDatas.map((itemData) => {
+                                return (
+                                    <ItemTableRowComponent
+                                        key={itemData.itemId}
+                                        itemData={itemData} />
+                                );
+                            }) : null
+                    }
                 </tbody>
             </Table>
             <Button onClick={handleShow}>+ Barang</Button>
             {' '}
             <Button onClick={() => setShowNotification(true)}>Edit MarkUp</Button>
 
-            <NotificationModal 
-            show={showNotification}
-            handleClose={() => setShowNotification(false)}
-            title="Notifikasi"
-            body="Berhasil" />
+            <NotificationModal
+                show={showNotification}
+                handleClose={() => setShowNotification(false)}
+                title="Notifikasi"
+                body="Berhasil" />
             <AddItemModal show={showAddModal} handleClose={handleClose} />
         </Container>
     );

@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { PathContext } from './Context';
+import PathProvider from './providers/PathProvider';
+import AuthProvider from './providers/AuthProvider';
 
 const Store = ({ children }) => {
 
-    const [path, setPath] = useState("/");
-
     return (
-        <PathContext.Provider value={[path, setPath]}>
-            {children}
-        </PathContext.Provider>
+        <AuthProvider>
+            <PathProvider>
+                {children}
+            </PathProvider>
+        </AuthProvider>
     );
 }
 
