@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 
+import ShopDetailsModal from '../components/ShopDetailsModal';
+
 export default () => {
+
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
+
     return (
         <Container>
+            <ShopDetailsModal
+                title="SHOP"
+                show={showDetailsModal}
+                handleClose={() => setShowDetailsModal(false)} />
+            <Button onClick={() => setShowDetailsModal(true)}>MODAL</Button>
             <Form>
                 <Form.Group as={Row} controlId="formHorizontalEmail">
                     <Form.Label column sm={4}>
@@ -16,7 +26,7 @@ export default () => {
                 </Form.Group>
             </Form>
             <Button>Cari</Button>
-            
+
             <Table striped bordered hover variant="dark">
                 <thead>
                     <tr>
