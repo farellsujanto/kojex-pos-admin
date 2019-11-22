@@ -205,6 +205,8 @@ export default () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showNotification, setShowNotification] = useState(false);
 
+    const [searchText, setSearchText] = useState('');
+
     const [itemDatas, setItemDatas] = useState([]);
 
     const handleClose = () => setShowAddModal(false);
@@ -233,7 +235,7 @@ export default () => {
                         <b>Cari Nama Barang</b>
                     </Form.Label>
                     <Col sm={8}>
-                        <Form.Control type="text" placeholder="Search" />
+                        <Form.Control type="text" placeholder="Search" onChange={(e) => setSearchText(e.target.value)}/>
                     </Col>
                 </Form.Group>
             </Form>
@@ -252,11 +254,19 @@ export default () => {
                     {
                         itemDatas ?
                             itemDatas.map((itemData) => {
-                                return (
-                                    <ItemTableRowComponent
-                                        key={itemData.itemId}
-                                        itemData={itemData} />
-                                );
+
+                                const itemName = itemData.itemName.toLowerCase();
+                                const searchName = searchText.toLowerCase();
+
+                                if (itemName.includes(searchName)) {
+                                    return (
+                                        <ItemTableRowComponent
+                                            key={itemData.itemId}
+                                            itemData={itemData} />
+                                    );
+                                }
+                                return null;
+                                
                             }) : null
                     }
                 </tbody>
