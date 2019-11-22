@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { firebaseApp } from '../utils/Firebase';
 
-import NotificationModal from '../components/NotificationModal';
-
 import { Container, Row, Col, Form, Button, Table, Modal, InputGroup, Dropdown, DropdownButton, Spinner } from 'react-bootstrap';
+
+import DeleteModal from '../components/DeleteModal';
 
 function FormComponent({ type, title, placeholder, changeListener }) {
     return (
@@ -24,7 +24,6 @@ function AddItemModal({ show, handleClose }) {
     const [itemId, setItemId] = useState('');
     const [itemName, setItemName] = useState('');
     const [price, setPrice] = useState(0);
-    const [markup, setMarkup] = useState(0);
     const [currentUnit, setCurrentUnit] = useState('');
 
     const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +33,6 @@ function AddItemModal({ show, handleClose }) {
             itemId === '' &&
             itemName === '' &&
             price === 0 &&
-            markup === 0 &&
             currentUnit === ''
         ) {
             window.alert("Tolong isi semua kolom yang kosong");
@@ -45,8 +43,7 @@ function AddItemModal({ show, handleClose }) {
             itemId: itemId,
             itemName: itemName,
             price: price,
-            markup: markup,
-            currentUnit: currentUnit,
+            itemUnit: currentUnit,
         }
 
         setIsLoading(true);
@@ -79,9 +76,10 @@ function AddItemModal({ show, handleClose }) {
             .doc(item.itemId)
             .set(item, { merge: true })
             .then(() => {
+                handleClose();
                 window.alert("Barang telah berhasil ditambah")
                 setIsLoading(false);
-                handleClose();
+
             }).catch((e) => {
                 console.log(e);
                 window.alert("Terjadi kesalahan silahkan coba lagi")
@@ -133,12 +131,6 @@ function AddItemModal({ show, handleClose }) {
                         </DropdownButton>
                         <Form.Control aria-describedby="basic-addon1" value={currentUnit} readOnly />
                     </InputGroup>
-                    <FormComponent
-                        title="Mark Up"
-                        type="number"
-                        placeholder="20"
-                        changeListener={setMarkup}
-                    />
                 </Form>
             </Modal.Body>
             <Modal.Footer>
@@ -171,7 +163,87 @@ function AddItemModal({ show, handleClose }) {
     );
 }
 
-function ItemTableRowComponent({ itemData }) {
+function EditMarkupModal({ show, handleClose }) {
+
+    const [markup, setMarkup] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    function updateMarkup() {
+        setIsLoading(true);
+        firebaseApp.firestore()
+            .collection("company")
+            .doc("First")
+            .collection("items")
+            .doc("markup")
+            .set({
+                perc: markup
+            }, { merge: true })
+            .then(() => {
+                window.alert("Markup telah berhasil diubah")
+                setIsLoading(false);
+                handleClose();
+            }).catch((e) => {
+                console.log(e);
+                window.alert("Terjadi kesalahan silahkan coba lagi")
+                setIsLoading(false);
+            });
+    }
+
+    return (
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>Tambah Barang</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form>
+                    <FormComponent
+                        title="Markup"
+                        type="number"
+                        placeholder="20"
+                        changeListener={setMarkup}
+                    />
+
+                </Form>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="link" onClick={handleClose}>
+                    Tutup
+                </Button>
+                <Button
+                    variant="primary"
+                    onClick={updateMarkup}
+                    disabled={isLoading}>
+                    {
+                        !isLoading ? "Tambah" :
+                            (
+                                <>
+                                    <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
+                                    {' '}Loading...
+                                </>
+                            )
+
+                    }
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
+
+
+function ItemTableRowComponent({ itemData, markup, prepareToDeleteId }) {
+
+    const [markupPrice, setMarkupPrice] = useState(0);
+
+    useEffect(() => {
+        setMarkupPrice(getMarkedupPrice());
+    }, [markup, itemData]);
 
     function formatNumber(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -189,22 +261,28 @@ function ItemTableRowComponent({ itemData }) {
     function getMarkedupPrice() {
 
         const price = Number(itemData.price);
-        const markup = Number(itemData.markup) + 100;
+        const markupPercentage = Number(markup) + 100;
 
-        const markedupPrice = price * markup / 100
+        const markedupPrice = price * markupPercentage / 100
 
         return formatNumber(Math.ceil(markedupPrice));
     }
 
     return (
-        <tr key={itemData.itemId}>
+        <tr>
             <td>{itemData.itemId}</td>
             <td>{itemData.itemName}</td>
+            <td>{itemData.itemUnit}</td>
             <td>{formatNumber(itemData.price)}</td>
-            <td>{itemData.markup} %</td>
-            <td>{getMarkedupPrice()}</td>
+            <td>{markup} %</td>
+            <td>{markupPrice}</td>
             <td>
-                <Button onClick={deleteItemFromDb} variant="danger" block>Delete</Button>
+                <Button
+                    onClick={() => prepareToDeleteId(itemData.itemId)}
+                    variant="danger" block
+                >
+                    Delete
+                </Button>
             </td>
         </tr>
     );
@@ -212,15 +290,24 @@ function ItemTableRowComponent({ itemData }) {
 
 export default () => {
 
-    const [showAddModal, setShowAddModal] = useState(false);
-    const [showNotification, setShowNotification] = useState(false);
-
     const [searchText, setSearchText] = useState('');
+    const [idToDelete, setIdToDelete] = useState('');
+
+    const [markup, setMarkup] = useState(0);
 
     const [itemDatas, setItemDatas] = useState([]);
 
-    const handleClose = () => setShowAddModal(false);
-    const handleShow = () => setShowAddModal(true);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const addModalHandleClose = () => setShowAddModal(false);
+    const addModalHandleShow = () => setShowAddModal(true);
+
+    const [showEditMarkupModal, setShowEditMarkupModal] = useState(false);
+    const editMarkupModalHandleClose = () => setShowEditMarkupModal(false);
+    const editMarkupModalHandleShow = () => setShowEditMarkupModal(true);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const deleteModalHandleClose = () => setShowDeleteModal(false);
+    const deleteModalHandleShow = () => setShowDeleteModal(true);
 
     useEffect(() => {
         const unsubscribe = firebaseApp.firestore()
@@ -229,13 +316,39 @@ export default () => {
             .collection("items").onSnapshot((snapshot) => {
                 let newItems = [];
                 snapshot.forEach((snap) => {
-                    newItems.push(snap.data());
+                    if (snap.id !== "markup") {
+                        newItems.push(snap.data());
+                    } else {
+                        setMarkup(snap.data().perc);
+                    }
                 });
                 setItemDatas(newItems);
             });
 
         return () => unsubscribe();
-    }, [])
+    }, []);
+
+    function prepareToDeleteId(itemId) {
+        deleteModalHandleShow();
+        setIdToDelete(itemId);
+    }
+
+    function deleteItemFromDb() {
+        firebaseApp.firestore()
+            .collection("company")
+            .doc("First")
+            .collection("items")
+            .doc(idToDelete)
+            .delete()
+            .then(() => {
+                deleteModalHandleClose();
+                window.alert("Barang telah dihapus")
+            }).catch((e) => {
+                console.log(e);
+                window.alert("Terjadi kesalahan silahkan coba lagi")
+            });
+    }
+
 
     return (
         <Container>
@@ -245,7 +358,7 @@ export default () => {
                         <b>Cari Nama Barang</b>
                     </Form.Label>
                     <Col sm={8}>
-                        <Form.Control type="text" placeholder="Search" onChange={(e) => setSearchText(e.target.value)}/>
+                        <Form.Control type="text" placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
                     </Col>
                 </Form.Group>
             </Form>
@@ -254,6 +367,7 @@ export default () => {
                     <tr>
                         <th>Id</th>
                         <th>Nama Barang</th>
+                        <th>Satuan</th>
                         <th>Harga</th>
                         <th>Mark Up</th>
                         <th>Harga Jual</th>
@@ -272,25 +386,24 @@ export default () => {
                                     return (
                                         <ItemTableRowComponent
                                             key={itemData.itemId}
-                                            itemData={itemData} />
+                                            itemData={itemData}
+                                            markup={markup}
+                                            prepareToDeleteId={prepareToDeleteId}
+                                        />
                                     );
                                 }
                                 return null;
-                                
                             }) : null
                     }
                 </tbody>
             </Table>
-            <Button onClick={handleShow}>+ Barang</Button>
+            <Button onClick={addModalHandleShow}>+ Barang</Button>
             {' '}
-            <Button onClick={() => setShowNotification(true)}>Edit MarkUp</Button>
+            <Button onClick={editMarkupModalHandleShow}>Edit MarkUp</Button>
 
-            <NotificationModal
-                show={showNotification}
-                handleClose={() => setShowNotification(false)}
-                title="Notifikasi"
-                body="Berhasil" />
-            <AddItemModal show={showAddModal} handleClose={handleClose} />
+            <DeleteModal show={showDeleteModal} handleClose={deleteModalHandleClose} handleConfirmation={deleteItemFromDb} />
+            <EditMarkupModal show={showEditMarkupModal} handleClose={editMarkupModalHandleClose} />
+            <AddItemModal show={showAddModal} handleClose={addModalHandleClose} />
         </Container>
     );
 }
