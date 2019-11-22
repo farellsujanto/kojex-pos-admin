@@ -186,13 +186,23 @@ function ItemTableRowComponent({ itemData }) {
             .delete();
     }
 
+    function getMarkedupPrice() {
+
+        const price = Number(itemData.price);
+        const markup = Number(itemData.markup) + 100;
+
+        const markedupPrice = price * markup / 100
+
+        return formatNumber(Math.ceil(markedupPrice));
+    }
+
     return (
         <tr key={itemData.itemId}>
             <td>{itemData.itemId}</td>
             <td>{itemData.itemName}</td>
             <td>{formatNumber(itemData.price)}</td>
             <td>{itemData.markup} %</td>
-            <td>{formatNumber(Number(itemData.price) * (100 + Number(itemData.markup)) / 100)}</td>
+            <td>{getMarkedupPrice()}</td>
             <td>
                 <Button onClick={deleteItemFromDb} variant="danger" block>Delete</Button>
             </td>
