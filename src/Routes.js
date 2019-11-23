@@ -21,6 +21,8 @@ import ShoppingAddPage from './pages/ShoppingAddPage';
 import ProductListPage from './pages/ProductListPage';
 import UserListPage from './pages/UserListPage';
 
+import RestaurantListPage from './pages/RestaurantListPage';
+
 function preparePage(children) {
 	return (
 		<Container>
@@ -49,19 +51,21 @@ function getPath(path) {
 		case '/':
 			return <HomePage />
 		case '/order/list':
-			return <OrderListPage />
+			return <OrderListPage />;
 		case '/order/add':
-			return <OrderAddPage />
+			return <OrderAddPage />;
 		case '/shopping/list':
-			return <ShoppingListPage />
+			return <ShoppingListPage />;
 		case '/shopping/add':
-			return <ShoppingAddPage />
+			return <ShoppingAddPage />;
 		case '/product/list':
-			return <ProductListPage />
+			return <ProductListPage />;
 		case '/user/list':
-			return <UserListPage />
+			return <UserListPage />;
+		case '/restaurant/list':
+			return <RestaurantListPage />;
 		default:
-			return <NotFoundPage />
+			return <NotFoundPage />;
 	}
 }
 

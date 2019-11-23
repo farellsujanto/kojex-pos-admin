@@ -77,6 +77,9 @@ function MaintenanceAccordion() {
                     <Button variant="light" onClick={() => setPath('/product/list')} block>
                         Daftar Produk
                     </Button>
+                    <Button variant="light" onClick={() => setPath('/restaurant/list')} block>
+                        Daftar Restoran
+                    </Button>
                     <Button variant="light" onClick={() => setPath('/user/list')} block>
                         Daftar User
                     </Button>

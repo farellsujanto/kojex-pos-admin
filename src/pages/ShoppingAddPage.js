@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Row, Col, Form, Button, Table, Dropdown } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Table, Dropdown, InputGroup, DropdownButton } from 'react-bootstrap';
 
 export default () => {
     return (
@@ -49,23 +49,24 @@ export default () => {
                 <tbody>
                     <tr>
                         <td>
-                            <Dropdown>
-                                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                    Dropdown Button
-                            </Dropdown.Toggle>
-
-                                <Dropdown.Menu>
-                                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
+                            <InputGroup className="mb-3">
+                                <DropdownButton
+                                    variant="outline-light"
+                                    title="Satuan"
+                                    id="input-group-dropdown-1"
+                                >
+                                    <Dropdown.Item>A</Dropdown.Item>
+                                    <Dropdown.Item>B</Dropdown.Item>
+                                   
+                                </DropdownButton>
+                                <Form.Control aria-describedby="basic-addon1" value={""} readOnly />
+                            </InputGroup>
                         </td>
                         <td>Username</td>
                         <td><Form.Control type="number" /></td>
                         <td><Form.Control type="number" /></td>
                         <td>
-                        <Button variant="danger" block>-</Button>
+                            <Button variant="danger" block>-</Button>
                         </td>
                     </tr>
                 </tbody>
