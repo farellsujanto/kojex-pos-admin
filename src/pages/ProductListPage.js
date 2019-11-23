@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { firebaseApp } from '../utils/Firebase';
 
 import { Container, Row, Col, Form, Button, Table, Modal, InputGroup, Dropdown, DropdownButton, Spinner } from 'react-bootstrap';
@@ -239,23 +239,8 @@ function EditMarkupModal({ show, handleClose }) {
 
 function ItemTableRowComponent({ itemData, markup, prepareToDeleteId }) {
 
-    const [markupPrice, setMarkupPrice] = useState(0);
-
-    useEffect(() => {
-        setMarkupPrice(getMarkedupPrice());
-    }, [markup, itemData]);
-
     function formatNumber(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-
-    function deleteItemFromDb() {
-        firebaseApp.firestore()
-            .collection("company")
-            .doc("First")
-            .collection("items")
-            .doc(itemData.itemId)
-            .delete();
     }
 
     function getMarkedupPrice() {
@@ -275,7 +260,7 @@ function ItemTableRowComponent({ itemData, markup, prepareToDeleteId }) {
             <td>{itemData.itemUnit}</td>
             <td>{formatNumber(itemData.price)}</td>
             <td>{markup} %</td>
-            <td>{markupPrice}</td>
+            <td>{getMarkedupPrice()}</td>
             <td>
                 <Button
                     onClick={() => prepareToDeleteId(itemData.itemId)}

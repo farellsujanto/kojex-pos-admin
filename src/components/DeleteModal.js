@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Modal, Button } from 'react-bootstrap';
 
-export default ({ show, handleClose, handleConfirmation, title, body }) => {
+export default ({ show, handleClose, handleConfirmation}) => {
 
     return (
         <Modal show={show} onHide={handleClose}>
