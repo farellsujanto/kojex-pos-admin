@@ -7,11 +7,7 @@ import OrderDetailsModal from '../components/OrderDetailsModal';
 export default () => {
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
-
-    useEffect(() => {
-        console.log("MOUNT")
-    },[])
-
+    
     return (
         <Container>
             <OrderDetailsModal
