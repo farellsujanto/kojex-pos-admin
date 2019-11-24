@@ -119,18 +119,18 @@ export default () => {
         return restaurantName;
     }
 
-    function getItemName(index) {
-        let itemName = "";
-        if (items) {
-            items.forEach((item) => {
-                if (item.id === formDatas[index].itemId) {
-                    itemName = item.data.itemName;
-                }
-            });
-        }
+    // function getItemName(index) {
+    //     let itemName = "";
+    //     if (items) {
+    //         items.forEach((item) => {
+    //             if (item.id === formDatas[index].itemId) {
+    //                 itemName = item.data.itemName;
+    //             }
+    //         });
+    //     }
 
-        return itemName;
-    }
+    //     return itemName;
+    // }
 
     function setFormDataItem(index, item) {
         let newFormDatas = [...formDatas];
