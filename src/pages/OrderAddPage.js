@@ -57,7 +57,7 @@ export default () => {
     const [items, setitems] = useState('');
 
     // Form
-    const [formDatas, setFormDatas] = useState([{ item: {id: ''}, qty: '' }]);
+    const [formDatas, setFormDatas] = useState([{ itemName: '', price: '', qty: '', itemUnit: '' }]);
     const [restaurantId, setRestaurantId] = useState('');
 
     useEffect(() => {
@@ -98,7 +98,7 @@ export default () => {
     }, []);
 
     function addFormRow() {
-        setFormDatas([...formDatas, { item: {id: ''}, qty: '' }]);
+        setFormDatas([...formDatas, { itemName: '', price: '', qty: '', itemUnit: '' }]);
     }
 
     function removeFormRow(index) {
@@ -134,7 +134,9 @@ export default () => {
 
     function setFormDataItem(index, item) {
         let newFormDatas = [...formDatas];
-        newFormDatas[index].item = item;
+        newFormDatas[index].itemName = item.data.itemName;
+        newFormDatas[index].price = item.data.price;
+        newFormDatas[index].itemUnit = item.data.itemUnit;
         setFormDatas(newFormDatas)
     }
 
@@ -143,6 +145,14 @@ export default () => {
         let newFormDatas = [...formDatas];
         newFormDatas[index].qty = newQty;
         setFormDatas(newFormDatas)
+    }
+
+    function calculatePrice(formData) {
+        return Number(formData.price) * Number(formData.qty);
+    }
+
+    function addDataToDb() {
+        console.log(formDatas)
     }
 
     return (
@@ -193,12 +203,12 @@ export default () => {
                                                 items={items}
                                                 setItem={setFormDataItem}
                                             />
-                                            <Form.Control aria-describedby="basic-addon1" value={formData.item.data ? formData.item.data.itemName : ''} readOnly />
+                                            <Form.Control aria-describedby="basic-addon1" value={formData.itemName} readOnly />
                                         </InputGroup>
                                     </td>
-                                    <td>Username</td>
+                                    <td>{formData.itemUnit}</td>
                                     <td><Form.Control type="number" value={formData.qty} onChange={(e) => setFormDataQty(index, e.target.value)} /></td>
-                                    <td><Form.Control type="number" /></td>
+                                    <td><Form.Control type="number" value={calculatePrice(formData)} readOnly/></td>
                                     <td>
                                         <Button onClick={() => removeFormRow(index)} variant="danger" block>-</Button>
                                     </td>
@@ -209,7 +219,7 @@ export default () => {
                 </tbody>
             </Table>
             <Button onClick={addFormRow}>+</Button> <br /><br />
-            <Button>Kirim</Button>
+            <Button onClick={addDataToDb}>Kirim</Button>
         </Container>
     );
 }
