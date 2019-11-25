@@ -16,5 +16,6 @@ let config = {
 };
 
 let firebaseApp = !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
+let secondaryApp = firebase.initializeApp(config, "Secondary");
 
-export { firebaseApp };
+export { firebaseApp, secondaryApp };

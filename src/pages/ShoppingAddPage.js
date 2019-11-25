@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { firebaseApp } from '../utils/Firebase';
 
-import { Container, Row, Col, Form, Button, Table, Dropdown, InputGroup, DropdownButton } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Table, Dropdown, InputGroup, DropdownButton, Image } from 'react-bootstrap';
 
 function ItemDropdownMenu({ items, setItem, formDataIndex }) {
     return (
@@ -113,15 +113,22 @@ export default () => {
 
     async function uploadImage(e) {
 
-        const fileData = e.target.files[0];
+        if (e.target.files[0]) {
+            const fileData = e.target.files[0];
 
-        setFile(fileData);
+            setFile(fileData);
 
-        var fr = new FileReader();
-        fr.onload = function () {
-            setimageSrc(fr.result);
+            var fr = new FileReader();
+            fr.onload = function () {
+                setimageSrc(fr.result);
+            }
+            fr.readAsDataURL(fileData);
+        } else {
+            setFile('');
+            setimageSrc('');
         }
-        fr.readAsDataURL(fileData);
+
+
     }
 
     return (
@@ -203,8 +210,8 @@ export default () => {
             <Button onClick={addFormRow}>+</Button> <br /><br />
             Lampiran<br />
             <Button>Upload Foto</Button> <br /><br />
-            <img src={imageSrc}/>
-            <Form.Control type="file" onChange={(e) => uploadImage(e)}/>
+            <Image src={imageSrc} rounded />
+            <Form.Control type="file" onChange={(e) => uploadImage(e)} />
             <Button onClick={addDataToDb}>Rekap</Button>
         </Container>
     );

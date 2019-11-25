@@ -5,8 +5,10 @@ import { PathContext } from '../store/Context';
 import { Container, Button, Accordion, Card } from 'react-bootstrap';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 
+import { RoleContext } from '../store/Context';
+
 function CustomToggle({ children, eventKey }) {
-    const decoratedOnClick = useAccordionToggle(eventKey, () => {});
+    const decoratedOnClick = useAccordionToggle(eventKey, () => { });
 
     return (
         <Button
@@ -94,6 +96,7 @@ function MaintenanceAccordion() {
 export default () => {
 
     const [, setPath] = useContext(PathContext);
+    const [role] = useContext(RoleContext);
 
     return (
         <Container>
@@ -102,9 +105,15 @@ export default () => {
                     Home
                 </Button>
                 <br />
-                <OrderAccordion />
-                <ShoppingAccordion />
-                <MaintenanceAccordion />
+                {
+                    role !== 'none' ?
+                        <>
+                            <OrderAccordion />
+                            <ShoppingAccordion />
+                        </> : null
+                }
+
+                {role === 'admin' ? <MaintenanceAccordion /> : null}
             </Accordion>
         </Container>
     );
