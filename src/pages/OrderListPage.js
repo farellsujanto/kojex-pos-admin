@@ -13,6 +13,8 @@ export default () => {
     const [keys, setKeys] = useState([]);
     const [currentData, setCurrentData] = useState({ date: '', user: '', orders: [] });
 
+    const [searchDate, setSearchDate] = useState('');
+
     useEffect(() => {
 
         const unsubscribeOrder = firebaseApp.firestore()
@@ -74,11 +76,10 @@ export default () => {
                         Tanggal Belanja
                     </Form.Label>
                     <Col sm={8}>
-                        <Form.Control type="date" />
+                        <Form.Control type="date" onChange={(e) => setSearchDate(e.target.value)} />
                     </Col>
                 </Form.Group>
             </Form>
-            <Button>Cari</Button>
 
             <Table striped bordered hover variant="dark">
                 <thead>
@@ -93,16 +94,19 @@ export default () => {
                         keys ?
                             keys.map((key) => {
                                 const [date, user] = decodeKey(key);
+                                if (!searchDate || searchDate === date) {
+                                    return (
+                                        <tr key={key}>
+                                            <td>{date}</td>
+                                            <td>{decodeEmail(user)}</td>
+                                            <td>
+                                                <Button onClick={() => openDetailsModal(date, user)} block>Lihat</Button>
+                                            </td>
+                                        </tr>
+                                    );
+                                }
+                                return null;
 
-                                return (
-                                    <tr key={key}>
-                                        <td>{date}</td>
-                                        <td>{decodeEmail(user)}</td>
-                                        <td>
-                                            <Button onClick={() => openDetailsModal(date, user)} block>Lihat</Button>
-                                        </td>
-                                    </tr>
-                                );
                             }) : null
                     }
                 </tbody>
