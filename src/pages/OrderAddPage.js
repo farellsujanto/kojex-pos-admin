@@ -40,7 +40,7 @@ function RestaurantDropdownMenu({ restaurants, setData }) {
                         return (
                             <Dropdown.Item
                                 key={restaurant.id}
-                                onClick={() => setData(restaurant.id)}
+                                onClick={() => setData(restaurant.data.name)}
                             >
                                 {restaurant.data.name}
                             </Dropdown.Item>
@@ -57,8 +57,9 @@ export default () => {
     const [items, setitems] = useState('');
 
     // Form
-    const [formDatas, setFormDatas] = useState([{ itemName: '', price: '', qty: '', itemUnit: '' }]);
-    const [restaurantId, setRestaurantId] = useState('');
+    const [formDatas, setFormDatas] = useState([{ itemName: '', qty: '', itemUnit: '' }]);
+    const [restaurantName, setRestaurantName] = useState('');
+    const [date, setDate] = useState('');
 
     useEffect(() => {
         const unsubscribeRestaurants = firebaseApp.firestore()
@@ -98,7 +99,7 @@ export default () => {
     }, []);
 
     function addFormRow() {
-        setFormDatas([...formDatas, { itemName: '', price: '', qty: '', itemUnit: '' }]);
+        setFormDatas([...formDatas, { itemName: '', qty: '', itemUnit: '' }]);
     }
 
     function removeFormRow(index) {
@@ -107,35 +108,9 @@ export default () => {
         setFormDatas(newFormData)
     }
 
-    function getRestaurantName() {
-        let restaurantName = "";
-        if (restaurants) {
-            restaurants.forEach((restaurant) => {
-                if (restaurant.id === restaurantId) {
-                    restaurantName = restaurant.data.name;
-                }
-            });
-        }
-        return restaurantName;
-    }
-
-    // function getItemName(index) {
-    //     let itemName = "";
-    //     if (items) {
-    //         items.forEach((item) => {
-    //             if (item.id === formDatas[index].itemId) {
-    //                 itemName = item.data.itemName;
-    //             }
-    //         });
-    //     }
-
-    //     return itemName;
-    // }
-
     function setFormDataItem(index, item) {
         let newFormDatas = [...formDatas];
         newFormDatas[index].itemName = item.data.itemName;
-        newFormDatas[index].price = item.data.price;
         newFormDatas[index].itemUnit = item.data.itemUnit;
         setFormDatas(newFormDatas)
     }
@@ -147,12 +122,65 @@ export default () => {
         setFormDatas(newFormDatas)
     }
 
-    function calculatePrice(formData) {
-        return Number(formData.price) * Number(formData.qty);
+    function checkFormDatas() {
+
+        if (formDatas.length === 0) {
+            return false;
+        }
+
+        let output = true;
+
+        for (const formData of formDatas) {
+            if (
+                formData.itemName === '' ||
+                formData.qty === '' ||
+                formData.itemUnit === ''
+            ) {
+                output = false;
+            }
+        }
+        return output;
+    }
+
+    function resetData() {
+        setRestaurantName('');
+        setFormDatas([{ itemName: '', qty: '', itemUnit: '' }]);
     }
 
     function addDataToDb() {
-        console.log(formDatas)
+
+        if (
+            date !== '' &&
+            restaurantName !== '' &&
+            checkFormDatas()
+        ) {
+
+            const orderRef = firebaseApp.firestore()
+                .collection('company')
+                .doc("First")
+                .collection("orders");
+
+            const data = {
+                formDatas: formDatas,
+                date: date,
+                restaurantName: restaurantName,
+                user: firebaseApp.auth().currentUser.email,
+            }
+
+            orderRef.add(data)
+            .then(() => {
+                resetData();
+                window.alert("Input data berhasil");
+            }).catch((e) => {
+                console.log(e);
+                window.alert("Input data gagal, silahkan coba lagi");
+            })
+
+        } else {
+           window.alert("Mohon isi semua data yang kosong");
+        }
+
+
     }
 
     return (
@@ -162,7 +190,7 @@ export default () => {
                     Tanggal Belanja
                     </Form.Label>
                 <Col sm={8}>
-                    <Form.Control type="date" onChange={(e) => console.log(e.target.value)} />
+                    <Form.Control type="date" onChange={(e) => setDate(e.target.value)} />
                 </Col>
             </Form.Group>
 
@@ -174,8 +202,8 @@ export default () => {
                     <InputGroup className="mb-3">
                         <RestaurantDropdownMenu
                             restaurants={restaurants}
-                            setData={setRestaurantId} />
-                        <Form.Control value={getRestaurantName()} readOnly />
+                            setData={setRestaurantName} />
+                        <Form.Control value={restaurantName} readOnly />
                     </InputGroup>
                 </Col>
             </Form.Group>
@@ -187,7 +215,6 @@ export default () => {
                         <th>Item</th>
                         <th>Satuan</th>
                         <th>Jumlah</th>
-                        <th>Harga Total</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -208,7 +235,6 @@ export default () => {
                                     </td>
                                     <td>{formData.itemUnit}</td>
                                     <td><Form.Control type="number" value={formData.qty} onChange={(e) => setFormDataQty(index, e.target.value)} /></td>
-                                    <td><Form.Control type="number" value={calculatePrice(formData)} readOnly/></td>
                                     <td>
                                         <Button onClick={() => removeFormRow(index)} variant="danger" block>-</Button>
                                     </td>
