@@ -161,7 +161,7 @@ export default () => {
                     {
                         users ?
                             users.map((user) => {
-                                if (decodeEmail(user.email).includes(userSearch)) {
+                                if (decodeEmail(user.email).includes(userSearch) && user.role !== 'admin') {
                                     return (
                                         <tr key={user.email}>
                                             <td>{user.uid}</td>
