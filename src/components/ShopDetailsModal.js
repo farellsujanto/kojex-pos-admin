@@ -1,13 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Modal, Button, Row, Col, Table } from 'react-bootstrap';
 
-export default ({ show, handleClose, title }) => {
+export default ({ show, handleClose, data }) => {
+
+    const [totalPrice, setTotalPrice] = useState(0);
+
+    useEffect(() => {
+
+    },[])
+
+    function decodeEmail(email) {
+        const output = email.split('@');
+        return output[0];
+    }
+
+    function getTotalPrice() {
+        let tempTotalPrice = 0;
+        if (data.formDatas.length) {
+            data.formDatas.forEach((formData) => {
+                tempTotalPrice += formData.price;
+            });
+
+        }
+        if (data.adtFormDatas.length) {
+            data.adtFormDatas.forEach((adtFormData) => {
+                tempTotalPrice += adtFormData.price;
+            });
+
+        }
+        return tempTotalPrice;
+    }
 
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>{title}</Modal.Title>
+                <Modal.Title>Detail Belanja</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Row>
@@ -15,7 +43,7 @@ export default ({ show, handleClose, title }) => {
                         Tanggal Belanja
                     </Col>
                     <Col sm={8}>
-                        12 / 09 / 19
+                        {data.date}
                     </Col>
                 </Row>
                 <Row>
@@ -23,7 +51,7 @@ export default ({ show, handleClose, title }) => {
                         Nama Penginput
                     </Col>
                     <Col sm={8}>
-                        Pembeli
+                        {decodeEmail(data.user)}
                     </Col>
                 </Row>
                 <div>
@@ -32,6 +60,7 @@ export default ({ show, handleClose, title }) => {
                         <thead>
                             <tr>
                                 <th>Id</th>
+                                <th>Nama</th>
                                 <th>Satuan</th>
                                 <th>Jumlah</th>
                                 <th>Harga</th>
@@ -39,14 +68,21 @@ export default ({ show, handleClose, title }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>001 WW</td>
-                                <td>Wortel</td>
-                                <td>Kg</td>
-                                <td>10</td>
-                                <td>10</td>
-                                <td>100</td>
-                            </tr>
+                            {
+                                data.formDatas ?
+                                    data.formDatas.map((formData) => {
+                                        return (
+                                            <tr key={formData.id}>
+                                                <td>{formData.id}</td>
+                                                <td>{formData.itemName}</td>
+                                                <td>{formData.itemUnit}</td>
+                                                <td>{formData.qty}</td>
+                                                <td>{formData.price / formData.qty}</td>
+                                                <td>{formData.price}</td>
+                                            </tr>
+                                        );
+                                    }) : null
+                            }
                         </tbody>
                     </Table>
                 </div>
@@ -55,45 +91,42 @@ export default ({ show, handleClose, title }) => {
                     <Table striped bordered hover variant="dark">
                         <thead>
                             <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th>Keterangan</th>
+                                <th>Harga</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                            {
+                                data.adtFormDatas ?
+                                    data.adtFormDatas.map((formData, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td>{formData.desc}</td>
+                                                <td>{formData.price}</td>
+                                            </tr>
+                                        );
+                                    }) : null
+                            }
+
                         </tbody>
                     </Table>
                 </div>
                 <div>
                     <Row>
                         <Col sm={4}>Total Belanja</Col>
-                        <Col sm={8}>158000</Col>
+                        <Col sm={8}>{getTotalPrice()}</Col>
                     </Row>
                     <Row>
-                        <Col sm={4}>Total Uang Belanja</Col>
-                        <Col sm={8}>200000</Col>
+                        <Col sm={4}>Uang Belanja</Col>
+                        <Col sm={8}>{data.allowance}</Col>
                     </Row>
                     <Row>
                         <Col sm={4}>Sisa Uang</Col>
-                        <Col sm={8}>42000</Col>
-                    </Row>
-                    <Row>
-                        <Col sm={4}>Sisa Uang Pembeli</Col>
-                        <Col sm={8}>42000</Col>
+                        <Col sm={8}>{data.remaining}</Col>
                     </Row>
                     <Row>
                         <Col sm={4}>Selisih</Col>
-                        <Col sm={8}>0</Col>
+                        <Col sm={8}>{(data.allowance - data.remaining) - getTotalPrice()}</Col>
                     </Row>
                 </div>
 

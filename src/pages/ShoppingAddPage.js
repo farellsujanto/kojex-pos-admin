@@ -32,6 +32,7 @@ export default () => {
     const [items, setitems] = useState('');
 
     const [formDatas, setFormDatas] = useState([{ itemName: '', price: '', qty: '', itemUnit: '' }]);
+    const [adtFormDatas, setAdtFormDatas] = useState([{ desc: '', price: '' }]);
 
     const [date, setDate] = useState('');
     const [allowance, setAllowance] = useState(0);
@@ -69,6 +70,7 @@ export default () => {
 
     function setFormDataItem(index, item) {
         let newFormDatas = [...formDatas];
+        newFormDatas[index].id = item.id;
         newFormDatas[index].itemName = item.data.itemName;
         // newFormDatas[index].price = item.data.price;
         newFormDatas[index].itemUnit = item.data.itemUnit;
@@ -78,23 +80,44 @@ export default () => {
     function addFormRow() {
         setFormDatas([...formDatas, { itemName: '', price: '', qty: '', itemUnit: '' }]);
     }
+    function addAdtFormRow() {
+        setAdtFormDatas([...adtFormDatas, { desc: '', price: '' }]);
+    }
 
     function addDataToDb() {
-        console.log("======")
-        console.log(date, allowance, remaining)
-        console.log(formDatas)
-        console.log(file)
-        console.log("======")
 
-        // const storageRef = firebaseApp.storage().ref();
-        // const refPath = 'images/' + file.name;
-        // const imageRef = storageRef.child(refPath);
-        // imageRef.put(file)
-        // .then((snapshot) => {
-        //     console.log('Uploaded a blob or file!');
-        // }).catch((e) => {
-        //     console.log(e);
-        // });
+        const shopPath = firebaseApp.firestore()
+            .collection('company')
+            .doc('First')
+            .collection('shops');
+
+        const storageRef = firebaseApp.storage().ref();
+        const refPath = 'images/' + file.name;
+
+        const dataToAdd = {
+            date: date,
+            user: firebaseApp.auth().currentUser.email,
+            allowance: allowance,
+            remaining: remaining,
+            formDatas: formDatas,
+            adtFormDatas: adtFormDatas,
+            imageRef: refPath,
+        }
+
+        console.log(dataToAdd)
+
+        const imageRef = storageRef.child(refPath);
+        imageRef.put(file)
+            .then((_) => {
+                shopPath.add(dataToAdd)
+                    .then(() => {
+                        window.alert("Data berhasil diinput");
+                    }).catch((e) => {
+                        window.alert("Terjadi kesalahan silahkan coba lagi");
+                    });
+            }).catch((e) => {
+                window.alert("Terjadi kesalahan silahkan coba lagi");
+            });
     }
 
     function setFormDataQty(index, qty) {
@@ -109,6 +132,25 @@ export default () => {
         let newFormDatas = [...formDatas];
         newFormDatas[index].price = newPrice;
         setFormDatas(newFormDatas)
+    }
+
+    function setAdtFormDataDesc(index, desc) {
+        let newAdtFormDatas = [...adtFormDatas];
+        newAdtFormDatas[index].desc = desc;
+        setAdtFormDatas(newAdtFormDatas)
+    }
+
+    function setAdtFormDataPrice(index, price) {
+        const newPrice = Number(price);
+        let newAdtFormDatas = [...adtFormDatas];
+        newAdtFormDatas[index].price = newPrice;
+        setAdtFormDatas(newAdtFormDatas)
+    }
+
+    function removeAdtFormRow(index) {
+        let newAdtFormDatas = [...adtFormDatas];
+        newAdtFormDatas.splice(index, 1);
+        setAdtFormDatas(newAdtFormDatas)
     }
 
     async function uploadImage(e) {
@@ -208,10 +250,38 @@ export default () => {
                 </tbody>
             </Table>
             <Button onClick={addFormRow}>+</Button> <br /><br />
+
+            Input Pembelian<br />
+            <Table striped bordered hover variant="dark">
+                <thead>
+                    <tr>
+                        <th>Keterangan</th>
+                        <th>Harga</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        adtFormDatas.map((adtFormData, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td><Form.Control type="text" value={adtFormData.desc} onChange={(e) => setAdtFormDataDesc(index, e.target.value)} /></td>
+                                    <td><Form.Control type="number" value={adtFormData.price} onChange={(e) => setAdtFormDataPrice(index, e.target.value)} /></td>
+                                    <td>
+                                        <Button onClick={() => removeAdtFormRow(index)} variant="danger" block>-</Button>
+                                    </td>
+                                </tr>
+                            );
+                        })
+                    }
+                </tbody>
+            </Table>
+            <Button onClick={addAdtFormRow}>+</Button> <br /><br />
+
             Lampiran<br />
-            <Button>Upload Foto</Button> <br /><br />
             <Image src={imageSrc} rounded />
             <Form.Control type="file" onChange={(e) => uploadImage(e)} />
+            <br />
             <Button onClick={addDataToDb}>Rekap</Button>
         </Container>
     );
