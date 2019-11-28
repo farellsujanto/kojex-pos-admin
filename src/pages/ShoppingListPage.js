@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { firebaseApp } from '../utils/Firebase';
 
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 
+import { RoleContext } from '../store/Context';
+
 import ShopDetailsModal from '../components/ShopDetailsModal';
+import DeleteModal from '../components/DeleteModal';
 
 export default () => {
+
+    const [role] = useContext(RoleContext);
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [shops, setShops] = useState([]);
 
     const [searchDate, setSearchDate] = useState('');
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState('');
 
     const [currenShopData, setCurrentShopData] = useState({
         date: '',
@@ -52,6 +60,27 @@ export default () => {
         setShowDetailsModal(true);
     }
 
+    function prepareToShowDeleteModal(id) {
+        setDeleteId(id);
+        setShowDeleteModal(true);
+    }
+
+    function deleteData() {
+        firebaseApp.firestore()
+            .collection("company")
+            .doc("First")
+            .collection("shops")
+            .doc(deleteId)
+            .delete()
+            .then(() => {
+                setShowDeleteModal(false);
+                window.alert("Data telah dihapus");
+            })
+            .catch((e) => {
+                console.log(e);
+                window.alert("Terjadi kesalahan, silahkan coba lagi");
+            });
+    }
 
     return (
         <Container>
@@ -88,6 +117,15 @@ export default () => {
                                                 <Button
                                                     onClick={() => prepareToShowDetailsModal(shop.data)}
                                                     block>Lihat</Button>
+                                                {
+                                                    role === 'admin' ?
+                                                        (
+                                                            <Button
+                                                            variant="danger"
+                                                                onClick={() => prepareToShowDeleteModal(shop.id)}
+                                                                block>Delete</Button>
+                                                        ) : null
+                                                }
                                             </td>
                                         </tr>
                                     );
@@ -96,6 +134,11 @@ export default () => {
                     }
                 </tbody>
             </Table>
+
+            <DeleteModal
+                show={showDeleteModal}
+                handleClose={() => setShowDeleteModal(false)}
+                handleConfirmation={deleteData} />
 
             <ShopDetailsModal
                 data={currenShopData}

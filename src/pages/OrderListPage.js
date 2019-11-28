@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { firebaseApp } from '../utils/Firebase';
 
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 
+import { RoleContext } from '../store/Context';
+
+import DeleteModal from '../components/DeleteModal';
 import OrderDetailsModal from '../components/OrderDetailsModal';
 
 export default () => {
+
+    const [role] = useContext(RoleContext);
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
 
@@ -14,6 +19,8 @@ export default () => {
     const [currentData, setCurrentData] = useState({ date: '', user: '', orders: [] });
 
     const [searchDate, setSearchDate] = useState('');
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState('');
 
     useEffect(() => {
 
@@ -26,11 +33,12 @@ export default () => {
                 snapshot.forEach((snap) => {
                     const date = snap.data().date;
                     const user = snap.data().user;
+                    const id = snap.id;
 
-                    if (newOrders[date + '#' + user]) {
-                        newOrders[date + '#' + user].push(snap.data());
+                    if (newOrders[date + '#' + user + '#' + id]) {
+                        newOrders[date + '#' + user + '#' + id].push(snap.data());
                     } else {
-                        newOrders[date + '#' + user] = [snap.data()];
+                        newOrders[date + '#' + user + '#' + id] = [snap.data()];
                     }
 
                 });
@@ -44,14 +52,14 @@ export default () => {
 
     function decodeKey(key) {
         const splittedKey = key.split('#');
-        return [splittedKey[0], splittedKey[1]];
+        return [splittedKey[0], splittedKey[1], splittedKey[2]];
     }
 
-    function openDetailsModal(date, user) {
+    function openDetailsModal(date, user, id) {
         const newCurrentData = {
             date: date,
             user: user,
-            orders: orders[date + '#' + user]
+            orders: orders[date + '#' + user + '#' + id]
         };
 
         setCurrentData(newCurrentData);
@@ -63,13 +71,31 @@ export default () => {
         return output[0];
     }
 
+    function prepareToShowDeleteModal(id) {
+        setDeleteId(id);
+        setShowDeleteModal(true);
+    }
+
+    function deleteData() {
+        firebaseApp.firestore()
+            .collection("company")
+            .doc("First")
+            .collection("orders")
+            .doc(deleteId)
+            .delete()
+            .then(() => {
+                setShowDeleteModal(false);
+                window.alert("Data telah dihapus");
+            })
+            .catch((e) => {
+                console.log(e);
+                window.alert("Terjadi kesalahan, silahkan coba lagi");
+            });
+    }
+
     return (
         <Container>
-            <OrderDetailsModal
-                title="ORDER"
-                show={showDetailsModal}
-                currentData={currentData}
-                handleClose={() => setShowDetailsModal(false)} />
+           
             <Form>
                 <Form.Group as={Row} controlId="formHorizontalEmail">
                     <Form.Label column sm={4}>
@@ -93,14 +119,23 @@ export default () => {
                     {
                         keys ?
                             keys.map((key) => {
-                                const [date, user] = decodeKey(key);
+                                const [date, user, id] = decodeKey(key);
                                 if (!searchDate || searchDate === date) {
                                     return (
                                         <tr key={key}>
                                             <td>{date}</td>
                                             <td>{decodeEmail(user)}</td>
                                             <td>
-                                                <Button onClick={() => openDetailsModal(date, user)} block>Lihat</Button>
+                                                <Button onClick={() => openDetailsModal(date, user, id)} block>Lihat</Button>
+                                                {
+                                                    role === 'admin' ?
+                                                        (
+                                                            <Button
+                                                            variant="danger"
+                                                                onClick={() => prepareToShowDeleteModal(id)}
+                                                                block>Delete</Button>
+                                                        ) : null
+                                                }
                                             </td>
                                         </tr>
                                     );
@@ -111,6 +146,15 @@ export default () => {
                     }
                 </tbody>
             </Table>
+            <DeleteModal
+                show={showDeleteModal}
+                handleClose={() => setShowDeleteModal(false)}
+                handleConfirmation={deleteData} />
+                 <OrderDetailsModal
+                title="ORDER"
+                show={showDetailsModal}
+                currentData={currentData}
+                handleClose={() => setShowDetailsModal(false)} />
         </Container>
     );
 }

@@ -12,10 +12,6 @@ export default ({ show, handleClose, title, currentData }) => {
 
     useEffect(() => {
         setReports([]);
-        defineNewReport();
-    }, [show]);
-
-    function defineNewReport() {
         let newReports = [];
         if (currentData.orders.length) {
             currentData.orders.forEach((order) => {
@@ -38,8 +34,7 @@ export default ({ show, handleClose, title, currentData }) => {
         }
         setReports(newReports);
         setKeys(Object.keys(newReports));
-    }
-
+    }, [show, currentData]);
 
     function decodeKey(key) {
         const splittedKey = key.split('#');
