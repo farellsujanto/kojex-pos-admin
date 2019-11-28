@@ -32,7 +32,7 @@ export default () => {
     const [items, setitems] = useState('');
 
     const [formDatas, setFormDatas] = useState([{ itemName: '', price: '', qty: '', itemUnit: '' }]);
-    const [adtFormDatas, setAdtFormDatas] = useState([{ desc: '', price: '' }]);
+    const [adtFormDatas, setAdtFormDatas] = useState([]);
 
     const [date, setDate] = useState('');
     const [allowance, setAllowance] = useState(0);
@@ -84,7 +84,53 @@ export default () => {
         setAdtFormDatas([...adtFormDatas, { desc: '', price: '' }]);
     }
 
+    function checkFormDatas() {
+        if (formDatas.length === 0) {
+            return false;
+        }
+
+        let output = true;
+
+        for (const formData of formDatas) {
+            if (
+                formData.itemName === '' ||
+                formData.qty === '' ||
+                formData.itemUnit === '' ||
+                formData.price === ''
+            ) {
+                output = false;
+            }
+        }
+        return output
+    }
+
+    function checkAdtDatas() {
+
+        let output = true;
+
+        for (const adtFormData of adtFormDatas) {
+            if (
+                adtFormData.desc === '' ||
+                adtFormData.price === ''
+            ) {
+                output = false;
+            }
+        }
+        return output
+    }
+
     function addDataToDb() {
+        if (
+            date === '' ||
+            allowance === '' ||
+            remaining === '' ||
+            file === '' ||
+            !checkFormDatas() ||
+            !checkAdtDatas()
+        ) {
+            window.alert("Tolong isi kolom yang kosong");
+            return;
+        }
 
         const shopPath = firebaseApp.firestore()
             .collection('company')
@@ -104,14 +150,29 @@ export default () => {
             imageRef: refPath,
         }
 
-        console.log(dataToAdd)
+        const batch = firebaseApp.firestore().batch();
+        const itemRef = firebaseApp.firestore()
+            .collection('company')
+            .doc('First')
+            .collection('items');
+
+        for (const formData of formDatas) {
+            batch.update(itemRef.doc(formData.id), {
+                price: formData.price / formData.qty
+            });
+        }
 
         const imageRef = storageRef.child(refPath);
         imageRef.put(file)
             .then((_) => {
                 shopPath.add(dataToAdd)
                     .then(() => {
-                        window.alert("Data berhasil diinput");
+                        batch.commit().then(() => {
+                            window.alert("Data berhasil diinput");
+                        }).catch((e) => {
+                            window.alert("Terjadi kesalahan silahkan coba lagi");
+                        });
+
                     }).catch((e) => {
                         window.alert("Terjadi kesalahan silahkan coba lagi");
                     });
