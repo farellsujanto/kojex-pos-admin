@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import ReactToPdf from 'react-to-pdf';
 
 import { Modal, Button, Row, Col, Table } from 'react-bootstrap';
 
 export default ({ show, handleClose, data }) => {
 
-    const [totalPrice, setTotalPrice] = useState(0);
+    const ref = React.createRef();
 
     useEffect(() => {
 
-    },[])
+    }, [])
 
     function decodeEmail(email) {
         const output = email.split('@');
@@ -33,11 +34,18 @@ export default ({ show, handleClose, data }) => {
     }
 
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleClose}  >
             <Modal.Header closeButton>
                 <Modal.Title>Detail Belanja</Modal.Title>
+                {' '}
+                <ReactToPdf targetRef={ref} filename={'Detail Belanja ' + decodeEmail(data.user) + ' ' + data.date} >
+                    {({ toPdf }) => (
+                        <button onClick={toPdf}>Generate pdf</button>
+                    )}
+                </ReactToPdf>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body  ref={ref}>
+
                 <Row>
                     <Col sm={4}>
                         Tanggal Belanja

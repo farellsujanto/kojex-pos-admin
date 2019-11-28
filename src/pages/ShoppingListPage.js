@@ -9,7 +9,7 @@ export default () => {
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [shops, setShops] = useState([]);
-    
+
     const [searchDate, setSearchDate] = useState('');
 
     const [currenShopData, setCurrentShopData] = useState({
@@ -51,6 +51,7 @@ export default () => {
         setCurrentShopData(data);
         setShowDetailsModal(true);
     }
+
 
     return (
         <Container>
