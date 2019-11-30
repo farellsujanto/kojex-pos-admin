@@ -1,26 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { firebaseApp } from '../utils/Firebase';
 
-import { Container, Row, Col, Form, Button, Table, Dropdown, InputGroup, DropdownButton, Image } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Table, Dropdown, InputGroup, DropdownButton, Image, FormControl } from 'react-bootstrap';
 
 function ItemDropdownMenu({ items, setItem, formDataIndex }) {
+
+    const [itemFilter, setItemFilter] = useState('');
+
     return (
         <DropdownButton
             variant="secondary"
             title="Barang"
             id="input-group-dropdown-1"
         >
+            <FormControl
+                autoFocus
+                className="mx-3 my-2 w-auto"
+                placeholder="Type to filter..."
+                onChange={e => setItemFilter(e.target.value)}
+                value={itemFilter}
+            />
             {
                 items ?
                     items.map((item) => {
-                        return (
-                            <Dropdown.Item
-                                key={item.id}
-                                onClick={() => setItem(formDataIndex, item)}
-                            >
-                                {item.data.itemName}
-                            </Dropdown.Item>
-                        );
+                        if (item.data.itemName) {
+                            const itemToSearch = item.data.itemName.toLowerCase();
+                            const searchFilter = itemFilter.toLowerCase();
+                            if (itemToSearch.includes(searchFilter)) {
+                                return (
+                                    <Dropdown.Item
+                                        key={item.id}
+                                        onClick={() => setItem(formDataIndex, item)}
+                                    >
+                                        {item.data.itemName}
+                                    </Dropdown.Item>
+                                );
+                            }
+                        }
+                        return null;
+
                     }) : null
             }
         </DropdownButton>

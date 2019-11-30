@@ -3,20 +3,27 @@ import { firebaseApp } from '../utils/Firebase';
 
 import { Container, Row, Col, Form, Button, Table, Dropdown, InputGroup, FormControl, DropdownButton } from 'react-bootstrap';
 
-function ItemDropdownMenu({ items, setItem, formDataIndex }) {
+function ItemDropdownMenu({ items, setItem, formDataIndex, itemFilter }) {
     return (
         <>
             {
                 items ?
                     items.map((item) => {
-                        return (
-                            <Dropdown.Item
-                                key={item.id}
-                                onClick={() => setItem(formDataIndex, item)}
-                            >
-                                {item.data.itemName}
-                            </Dropdown.Item>
-                        );
+                        if (item.data.itemName) {
+                            const itemToSearch = item.data.itemName.toLowerCase();
+                            const searchFilter = itemFilter.toLowerCase();
+                            if (itemToSearch.includes(searchFilter)) {
+                                return (
+                                    <Dropdown.Item
+                                        key={item.id}
+                                        onClick={() => setItem(formDataIndex, item)}
+                                    >
+                                        {item.data.itemName}
+                                    </Dropdown.Item>
+                                );
+                            }
+                        }
+                        return null;
                     }) : null
             }
         </>
@@ -24,57 +31,44 @@ function ItemDropdownMenu({ items, setItem, formDataIndex }) {
 }
 
 function RestaurantDropdownMenu({ restaurants, setData }) {
+    const [restaurantFilter, setRestaurantFilter] = useState('');
+
     return (
         <DropdownButton
             variant="secondary"
             title="Restoran"
             id="input-group-dropdown-1"
         >
+            <FormControl
+                autoFocus
+                className="mx-3 my-2 w-auto"
+                placeholder="Type to filter..."
+                onChange={e => setRestaurantFilter(e.target.value)}
+                value={restaurantFilter}
+            />
             {
                 restaurants ?
                     restaurants.map((restaurant) => {
-                        return (
-                            <Dropdown.Item
-                                key={restaurant.id}
-                                onClick={() => setData(restaurant.data.name)}
-                            >
-                                {restaurant.data.name}
-                            </Dropdown.Item>
-                        );
+                        if (restaurant.data.name) {
+                            const itemToSearch = restaurant.data.name.toLowerCase();
+                            const searchFilter = restaurantFilter.toLowerCase();
+                            if (itemToSearch.includes(searchFilter)) {
+                                return (
+                                    <Dropdown.Item
+                                        key={restaurant.id}
+                                        onClick={() => setData(restaurant.data.name)}
+                                    >
+                                        {restaurant.data.name}
+                                    </Dropdown.Item>
+                                );
+                            }
+                        }
+                        return null;
                     }) : null
             }
         </DropdownButton>
     );
 }
-
-const CustomMenu = React.forwardRef(
-    ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
-        const [value, setValue] = useState('');
-
-        return (
-            <div
-                ref={ref}
-                style={style}
-                className={className}
-                aria-labelledby={labeledBy}
-            >
-                <FormControl
-                    autoFocus
-                    className="mx-3 my-2 w-auto"
-                    placeholder="Type to filter..."
-                    onChange={e => setValue(e.target.value)}
-                    value={value}
-                />
-                <ul className="list-unstyled">
-                    {React.Children.toArray(children).filter(
-                        child =>
-                            !value || child.props.children.toLowerCase().startsWith(value),
-                    )}
-                </ul>
-            </div>
-        );
-    },
-);
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <DropdownButton
@@ -100,6 +94,10 @@ export default () => {
     const [formDatas, setFormDatas] = useState([{ itemName: '', qty: '', itemUnit: '' }]);
     const [restaurantName, setRestaurantName] = useState('');
     const [date, setDate] = useState('');
+
+    // Filter
+    const [itemFilter, setItemFilter] = useState('');
+
 
     useEffect(() => {
         const unsubscribeRestaurants = firebaseApp.firestore()
@@ -266,16 +264,27 @@ export default () => {
                                     <td>
                                         <InputGroup className="mb-3">
                                             <Dropdown>
-                                                <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                                                    Custom toggle
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu as={CustomMenu}>
-                                                    <ItemDropdownMenu
-                                                        formDataIndex={index}
-                                                        items={items}
-                                                        setItem={setFormDataItem}
-                                                    />
-                                                </Dropdown.Menu>
+                                                <DropdownButton
+                                                    variant="secondary"
+                                                    title="Barang"
+                                                    id="input-group-dropdown-1"
+                                                >
+                                                    <Dropdown.Menu>
+                                                        <FormControl
+                                                            autoFocus
+                                                            className="mx-3 my-2 w-auto"
+                                                            placeholder="Type to filter..."
+                                                            onChange={e => setItemFilter(e.target.value)}
+                                                            value={itemFilter}
+                                                        />
+                                                        <ItemDropdownMenu
+                                                            formDataIndex={index}
+                                                            items={items}
+                                                            setItem={setFormDataItem}
+                                                            itemFilter={itemFilter}
+                                                        />
+                                                    </Dropdown.Menu>
+                                                </DropdownButton>
 
                                             </Dropdown>
 

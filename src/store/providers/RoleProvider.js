@@ -18,7 +18,6 @@ export default ({ children }) => {
                 .collection("users")
                 .doc(firebaseApp.auth().currentUser.uid)
                 .onSnapshot((snap) => {
-                    console.log(snap)
                     if (snap.exists) {
                         setRole(snap.data().role);
                     } else {
