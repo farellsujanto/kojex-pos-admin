@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Navbar, Button } from 'react-bootstrap';
+import { Navbar, Button, Nav } from 'react-bootstrap';
 
 import { firebaseApp } from '../utils/Firebase';
 
@@ -17,13 +17,12 @@ export default () => {
     }
 
     return (
-        <Navbar expand="lg" variant="light" bg="light">
-            {/* <Navbar.Brand href="#">Navbar</Navbar.Brand> */}
-            <Navbar.Collapse className="justify-content-end">
+        <Navbar variant="light" bg="light">
+            <Nav className="justify-content-end" style={{ width: "100%" }}>
                 <Navbar.Text>
-                    { getUsername() } <Button onClick={signOut} variant="link"> Keluar</Button>
+                    {getUsername()} <Button onClick={signOut} variant="link"> Keluar</Button>
                 </Navbar.Text>
-            </Navbar.Collapse>
+            </Nav>
         </Navbar>
     );
 }

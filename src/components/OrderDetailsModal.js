@@ -79,7 +79,7 @@ export default ({ show, handleClose, title, currentData }) => {
                     <br />
                     <b>Report Per Item</b>
                     <br />
-                    <Table striped bordered hover variant="dark">
+                    <Table striped bordered hover variant="dark" responsive>
                         <thead>
                             <tr>
                                 <th>Item</th>
@@ -114,7 +114,7 @@ export default ({ show, handleClose, title, currentData }) => {
                                     <br />
                                     <b>{order.restaurantName}</b>
                                     <br />
-                                    <Table striped bordered hover variant="dark">
+                                    <Table striped bordered hover variant="dark" table>
                                         <thead>
                                             <tr>
                                                 <th>Item</th>

@@ -64,7 +64,7 @@ export default ({ show, handleClose, data }) => {
                 </Row>
                 <div>
                     Laporan Pembelian
-                    <Table striped bordered hover variant="dark">
+                    <Table striped bordered hover variant="dark" responsive>
                         <thead>
                             <tr>
                                 <th>Id</th>
@@ -96,7 +96,7 @@ export default ({ show, handleClose, data }) => {
                 </div>
                 <div>
                     Laporan Biaya Lain Lain
-                    <Table striped bordered hover variant="dark">
+                    <Table striped bordered hover variant="dark" responsive>
                         <thead>
                             <tr>
                                 <th>Keterangan</th>

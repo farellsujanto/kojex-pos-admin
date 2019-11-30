@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { firebaseApp } from '../utils/Firebase';
 
-import { Container, Row, Col, Form, Button, Table, Dropdown, InputGroup, DropdownButton } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Table, Dropdown, InputGroup, FormControl, DropdownButton } from 'react-bootstrap';
 
 function ItemDropdownMenu({ items, setItem, formDataIndex }) {
     return (
-        <DropdownButton
-            variant="secondary"
-            title="Barang"
-            id="input-group-dropdown-1"
-        >
+        <>
             {
                 items ?
                     items.map((item) => {
@@ -23,7 +19,7 @@ function ItemDropdownMenu({ items, setItem, formDataIndex }) {
                         );
                     }) : null
             }
-        </DropdownButton>
+        </>
     );
 }
 
@@ -50,6 +46,50 @@ function RestaurantDropdownMenu({ restaurants, setData }) {
         </DropdownButton>
     );
 }
+
+const CustomMenu = React.forwardRef(
+    ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
+        const [value, setValue] = useState('');
+
+        return (
+            <div
+                ref={ref}
+                style={style}
+                className={className}
+                aria-labelledby={labeledBy}
+            >
+                <FormControl
+                    autoFocus
+                    className="mx-3 my-2 w-auto"
+                    placeholder="Type to filter..."
+                    onChange={e => setValue(e.target.value)}
+                    value={value}
+                />
+                <ul className="list-unstyled">
+                    {React.Children.toArray(children).filter(
+                        child =>
+                            !value || child.props.children.toLowerCase().startsWith(value),
+                    )}
+                </ul>
+            </div>
+        );
+    },
+);
+
+const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+    <DropdownButton
+        variant="secondary"
+        title="Barang"
+        id="input-group-dropdown-1"
+        ref={ref}
+        onClick={e => {
+            e.preventDefault();
+            onClick(e);
+        }}
+    >
+        {children}
+    </DropdownButton>
+));
 
 export default () => {
 
@@ -168,16 +208,16 @@ export default () => {
             }
 
             orderRef.add(data)
-            .then(() => {
-                resetData();
-                window.alert("Input data berhasil");
-            }).catch((e) => {
-                console.log(e);
-                window.alert("Input data gagal, silahkan coba lagi");
-            })
+                .then(() => {
+                    resetData();
+                    window.alert("Input data berhasil");
+                }).catch((e) => {
+                    console.log(e);
+                    window.alert("Input data gagal, silahkan coba lagi");
+                })
 
         } else {
-           window.alert("Mohon isi semua data yang kosong");
+            window.alert("Mohon isi semua data yang kosong");
         }
 
 
@@ -225,11 +265,20 @@ export default () => {
                                 <tr key={index}>
                                     <td>
                                         <InputGroup className="mb-3">
-                                            <ItemDropdownMenu
-                                                formDataIndex={index}
-                                                items={items}
-                                                setItem={setFormDataItem}
-                                            />
+                                            <Dropdown>
+                                                <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
+                                                    Custom toggle
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu as={CustomMenu}>
+                                                    <ItemDropdownMenu
+                                                        formDataIndex={index}
+                                                        items={items}
+                                                        setItem={setFormDataItem}
+                                                    />
+                                                </Dropdown.Menu>
+
+                                            </Dropdown>
+
                                             <Form.Control aria-describedby="basic-addon1" value={formData.itemName} readOnly />
                                         </InputGroup>
                                     </td>

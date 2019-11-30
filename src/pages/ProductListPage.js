@@ -347,7 +347,7 @@ export default () => {
                     </Col>
                 </Form.Group>
             </Form>
-            <Table striped bordered hover variant="dark">
+            <Table striped bordered hover variant="dark" responsive>
                 <thead>
                     <tr>
                         <th>Id</th>
