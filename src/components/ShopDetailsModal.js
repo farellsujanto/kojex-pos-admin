@@ -3,6 +3,8 @@ import ReactToPdf from 'react-to-pdf';
 
 import { Modal, Button, Row, Col, Table } from 'react-bootstrap';
 
+import Doc from '../utils/DocService';
+
 export default ({ show, handleClose, data }) => {
 
     const ref = React.createRef();
@@ -33,22 +35,31 @@ export default ({ show, handleClose, data }) => {
         return tempTotalPrice;
     }
 
+    function getFileName() {
+        return 'Detail Belanja ' + decodeEmail(data.user) + ' ' + data.date;
+    }
+
+    function formatNumber(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
     return (
         <Modal show={show} onHide={handleClose}  >
             <Modal.Header closeButton>
                 <Modal.Title>Detail Belanja</Modal.Title>
                 {' '}
-                <ReactToPdf targetRef={ref} filename={'Detail Belanja ' + decodeEmail(data.user) + ' ' + data.date} >
+                <button onClick={() => Doc.createPdf(ref.current, getFileName())}>Generate pdf</button>
+                {/* <ReactToPdf targetRef={ref} filename={'Detail Belanja ' + decodeEmail(data.user) + ' ' + data.date} >
                     {({ toPdf }) => (
                         <button onClick={toPdf}>Generate pdf</button>
                     )}
-                </ReactToPdf>
+                </ReactToPdf> */}
             </Modal.Header>
             <Modal.Body  ref={ref}>
 
                 <Row>
                     <Col sm={4}>
-                        Tanggal Belanja
+                        <b>Tanggal Belanja</b>
                     </Col>
                     <Col sm={8}>
                         {data.date}
@@ -56,14 +67,14 @@ export default ({ show, handleClose, data }) => {
                 </Row>
                 <Row>
                     <Col sm={4}>
-                        Nama Penginput
+                       <b>Nama Penginput</b>
                     </Col>
                     <Col sm={8}>
                         {decodeEmail(data.user)}
                     </Col>
                 </Row>
                 <div>
-                    Laporan Pembelian
+                    <b>Laporan Pembelian</b>
                     <Table striped bordered hover variant="dark" responsive>
                         <thead>
                             <tr>
@@ -85,8 +96,8 @@ export default ({ show, handleClose, data }) => {
                                                 <td>{formData.itemName}</td>
                                                 <td>{formData.itemUnit}</td>
                                                 <td>{formData.qty}</td>
-                                                <td>{formData.price / formData.qty}</td>
-                                                <td>{formData.price}</td>
+                                                <td>{formatNumber((formData.price / formData.qty))}</td>
+                                                <td>{formatNumber(formData.price)}</td>
                                             </tr>
                                         );
                                     }) : null
@@ -95,7 +106,7 @@ export default ({ show, handleClose, data }) => {
                     </Table>
                 </div>
                 <div>
-                    Laporan Biaya Lain Lain
+                    <b>Laporan Biaya Lain Lain</b>
                     <Table striped bordered hover variant="dark" responsive>
                         <thead>
                             <tr>
@@ -110,7 +121,7 @@ export default ({ show, handleClose, data }) => {
                                         return (
                                             <tr key={index}>
                                                 <td>{formData.desc}</td>
-                                                <td>{formData.price}</td>
+                                                <td>{formatNumber(formData.price)}</td>
                                             </tr>
                                         );
                                     }) : null
@@ -121,20 +132,20 @@ export default ({ show, handleClose, data }) => {
                 </div>
                 <div>
                     <Row>
-                        <Col sm={4}>Total Belanja</Col>
-                        <Col sm={8}>{getTotalPrice()}</Col>
+                        <Col sm={4}><b>Total Belanja</b></Col>
+                        <Col sm={8}><b>Rp.</b> {formatNumber(getTotalPrice())}</Col>
                     </Row>
                     <Row>
-                        <Col sm={4}>Uang Belanja</Col>
-                        <Col sm={8}>{data.allowance}</Col>
+                        <Col sm={4}><b>Uang Belanja</b></Col>
+                        <Col sm={8}><b>Rp.</b>  {formatNumber(Number(data.allowance))}</Col>
                     </Row>
                     <Row>
-                        <Col sm={4}>Sisa Uang</Col>
-                        <Col sm={8}>{data.remaining}</Col>
+                        <Col sm={4}><b>Sisa Uang</b></Col>
+                        <Col sm={8}><b>Rp.</b>  {formatNumber(Number(data.remaining))}</Col>
                     </Row>
                     <Row>
-                        <Col sm={4}>Selisih</Col>
-                        <Col sm={8}>{(data.allowance - data.remaining) - getTotalPrice()}</Col>
+                        <Col sm={4}><b>Selisih</b></Col>
+                        <Col sm={8}><b>Rp.</b>  {formatNumber(((data.allowance - data.remaining) - getTotalPrice()))}</Col>
                     </Row>
                 </div>
 

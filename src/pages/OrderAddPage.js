@@ -70,21 +70,6 @@ function RestaurantDropdownMenu({ restaurants, setData }) {
     );
 }
 
-const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-    <DropdownButton
-        variant="secondary"
-        title="Barang"
-        id="input-group-dropdown-1"
-        ref={ref}
-        onClick={e => {
-            e.preventDefault();
-            onClick(e);
-        }}
-    >
-        {children}
-    </DropdownButton>
-));
-
 export default () => {
 
     const [restaurants, setRestaurants] = useState([]);

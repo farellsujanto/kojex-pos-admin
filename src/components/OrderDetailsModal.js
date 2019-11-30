@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import ReactToPdf from 'react-to-pdf';
+// import ReactToPdf from 'react-to-pdf';
 
 import { Modal, Button, Row, Col, Table } from 'react-bootstrap';
+
+import Doc from '../utils/DocService';
 
 export default ({ show, handleClose, title, currentData }) => {
 
@@ -46,17 +48,21 @@ export default ({ show, handleClose, title, currentData }) => {
         return output[0];
     }
 
+    function getFileName() {
+        return 'Detail Order ' + decodeEmail(currentData.user) + ' ' + currentData.date;
+    }
 
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
                 <Modal.Title>{title}</Modal.Title>
                 {' '}
-                <ReactToPdf targetRef={ref} filename={'Detail Order ' + decodeEmail(currentData.user) + ' ' + currentData.date} >
+                <button onClick={() => Doc.createPdf(ref.current, getFileName())}>Generate pdf</button>
+                {/* <ReactToPdf targetRef={ref} filename={'Detail Order ' + decodeEmail(currentData.user) + ' ' + currentData.date} >
                     {({ toPdf }) => (
                         <button onClick={toPdf}>Generate pdf</button>
                     )}
-                </ReactToPdf>
+                </ReactToPdf> */}
             </Modal.Header>
             <Modal.Body ref={ref}>
                 <Row>

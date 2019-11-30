@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@progress/kendo-drawing": "^1.6.0",
+    "@progress/kendo-react-pdf": "^3.9.0",
     "bootstrap": "^4.3.1",
     "firebase": "^6.4.2",
     "jquery": "^3.4.1",
