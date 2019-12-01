@@ -321,10 +321,10 @@ export default () => {
                                             <Form.Control aria-describedby="basic-addon1" value={formData.itemName} readOnly />
                                         </InputGroup>
                                     </td>
-                                    <td>{formData.itemUnit}</td>
-                                    <td><Form.Control type="number" value={Number(formData.qty).toString()} onChange={(e) => setFormDataQty(index, e.target.value)} /></td>
+                                    <td style={{minWidth:'150px'}}>{formData.itemUnit}</td>
+                                    <td style={{minWidth:'150px'}}><Form.Control type="number" value={Number(formData.qty).toString()} onChange={(e) => setFormDataQty(index, e.target.value)} /></td>
                                     {/* <td><Form.Control type="number" value={Number(formData.price).toString()} onChange={(e) => setFormDataPrice(index, e.target.value)} /></td> */}
-                                    <td>
+                                    <td style={{minWidth:'150px'}}>
                                         <NumberFormat customInput={Form.Control} value={formData.price} thousandSeparator='.' decimalSeparator=',' onValueChange={(values) => {
                                             const { _, value } = values;
                                             setFormDataPrice(index, value);
@@ -342,7 +342,7 @@ export default () => {
             <Button onClick={addFormRow}>+</Button> <br /><br />
 
             Input Pembelian<br />
-            <Table striped bordered hover variant="dark">
+            <Table striped bordered hover variant="dark" responsive>
                 <thead>
                     <tr>
                         <th>Keterangan</th>
@@ -355,9 +355,9 @@ export default () => {
                         adtFormDatas.map((adtFormData, index) => {
                             return (
                                 <tr key={index}>
-                                    <td><Form.Control type="text" value={adtFormData.desc} onChange={(e) => setAdtFormDataDesc(index, e.target.value)} /></td>
+                                    <td style={{minWidth:'150px'}}><Form.Control type="text" value={adtFormData.desc} onChange={(e) => setAdtFormDataDesc(index, e.target.value)} /></td>
                                     {/* <td><Form.Control type="number" value={adtFormData.price} onChange={(e) => setAdtFormDataPrice(index, e.target.value)} /></td> */}
-                                    <td>
+                                    <td style={{minWidth:'150px'}}>
                                         <NumberFormat customInput={Form.Control} value={adtFormData.price} thousandSeparator='.' decimalSeparator=',' onValueChange={(values) => {
                                             const { _, value } = values;
                                             setAdtFormDataPrice(index, value);

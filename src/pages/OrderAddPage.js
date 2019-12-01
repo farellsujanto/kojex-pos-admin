@@ -277,7 +277,7 @@ export default () => {
                                         </InputGroup>
                                     </td>
                                     <td>{formData.itemUnit}</td>
-                                    <td><Form.Control type="number" value={Number(formData.qty).toString()} onChange={(e) => setFormDataQty(index, e.target.value)} /></td>
+                                    <td style={{minWidth:'150px'}}><Form.Control type="number" value={Number(formData.qty).toString()} onChange={(e) => setFormDataQty(index, e.target.value)} /></td>
                                     <td>
                                         <Button onClick={() => removeFormRow(index)} variant="danger" block>-</Button>
                                     </td>
