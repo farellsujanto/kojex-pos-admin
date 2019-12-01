@@ -1,17 +1,14 @@
-import React, { useEffect } from 'react';
-import ReactToPdf from 'react-to-pdf';
+import React from 'react';
 
 import { Modal, Button, Row, Col, Table } from 'react-bootstrap';
+
+import { firebaseApp } from '../utils/Firebase';
 
 import Doc from '../utils/DocService';
 
 export default ({ show, handleClose, data }) => {
 
     const ref = React.createRef();
-
-    useEffect(() => {
-
-    }, [])
 
     function decodeEmail(email) {
         const output = email.split('@');
@@ -43,19 +40,47 @@ export default ({ show, handleClose, data }) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
+    function downloadAttachedImage(imageRef) {
+        const storageRef = firebaseApp.storage().ref();
+        storageRef.child(imageRef).getDownloadURL().then(function (url) {
+            let xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            xhr.onload = function (event) {
+                let a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                let blob = xhr.response;
+
+                let url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = getFileName() + '_' + imageRef;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            };
+            xhr.open('GET', url);
+            xhr.send();
+        }).catch(function (e) {
+            console.log(e)
+            window.alert("Terjadi kesalahan, silahkan coba lagi");
+        });
+    }
+
     return (
         <Modal show={show} onHide={handleClose}  >
             <Modal.Header closeButton>
                 <Modal.Title>Detail Belanja</Modal.Title>
                 {' '}
-                <button onClick={() => Doc.createPdf(ref.current, getFileName())}>Generate pdf</button>
+                
+                <Button variant="secondary" onClick={() => downloadAttachedImage(data.imageRef)}>Download Attached Image</Button>
+
+                <Button onClick={() => Doc.createPdf(ref.current, getFileName())}>Generate pdf</Button>
                 {/* <ReactToPdf targetRef={ref} filename={'Detail Belanja ' + decodeEmail(data.user) + ' ' + data.date} >
                     {({ toPdf }) => (
                         <button onClick={toPdf}>Generate pdf</button>
                     )}
                 </ReactToPdf> */}
             </Modal.Header>
-            <Modal.Body  ref={ref}>
+            <Modal.Body ref={ref}>
 
                 <Row>
                     <Col sm={4}>
@@ -67,7 +92,7 @@ export default ({ show, handleClose, data }) => {
                 </Row>
                 <Row>
                     <Col sm={4}>
-                       <b>Nama Penginput</b>
+                        <b>Nama Penginput</b>
                     </Col>
                     <Col sm={8}>
                         {decodeEmail(data.user)}
