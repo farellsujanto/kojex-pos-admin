@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { firebaseApp } from '../utils/Firebase';
+import NumberFormat from 'react-number-format';
 
 import { Container, Row, Col, Form, Button, Table, Dropdown, InputGroup, DropdownButton, Image, FormControl } from 'react-bootstrap';
 
@@ -252,6 +253,10 @@ export default () => {
 
     }
 
+    function formatNumber(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
     return (
         <Container>
             <Form>
@@ -291,7 +296,7 @@ export default () => {
             </Form>
 
             Input Pembelian<br />
-            <Table striped bordered hover variant="dark">
+            <Table striped bordered hover variant="dark" responsive>
                 <thead>
                     <tr>
                         <th>Item</th>
@@ -317,8 +322,14 @@ export default () => {
                                         </InputGroup>
                                     </td>
                                     <td>{formData.itemUnit}</td>
-                                    <td><Form.Control type="number" value={formData.qty} onChange={(e) => setFormDataQty(index, e.target.value)} /></td>
-                                    <td><Form.Control type="number" value={formData.price} onChange={(e) => setFormDataPrice(index, e.target.value)} /></td>
+                                    <td><Form.Control type="number" value={Number(formData.qty).toString()} onChange={(e) => setFormDataQty(index, e.target.value)} /></td>
+                                    {/* <td><Form.Control type="number" value={Number(formData.price).toString()} onChange={(e) => setFormDataPrice(index, e.target.value)} /></td> */}
+                                    <td>
+                                        <NumberFormat customInput={Form.Control} value={formData.price} thousandSeparator='.' decimalSeparator=',' onValueChange={(values) => {
+                                            const { _, value } = values;
+                                            setFormDataPrice(index, value);
+                                        }} />
+                                    </td>
                                     <td>
                                         <Button onClick={() => removeFormRow(index)} variant="danger" block>-</Button>
                                     </td>
@@ -345,7 +356,13 @@ export default () => {
                             return (
                                 <tr key={index}>
                                     <td><Form.Control type="text" value={adtFormData.desc} onChange={(e) => setAdtFormDataDesc(index, e.target.value)} /></td>
-                                    <td><Form.Control type="number" value={adtFormData.price} onChange={(e) => setAdtFormDataPrice(index, e.target.value)} /></td>
+                                    {/* <td><Form.Control type="number" value={adtFormData.price} onChange={(e) => setAdtFormDataPrice(index, e.target.value)} /></td> */}
+                                    <td>
+                                        <NumberFormat customInput={Form.Control} value={adtFormData.price} thousandSeparator='.' decimalSeparator=',' onValueChange={(values) => {
+                                            const { _, value } = values;
+                                            setAdtFormDataPrice(index, value);
+                                        }} />
+                                    </td>
                                     <td>
                                         <Button onClick={() => removeAdtFormRow(index)} variant="danger" block>-</Button>
                                     </td>

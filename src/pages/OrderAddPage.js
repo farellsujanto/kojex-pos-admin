@@ -76,7 +76,7 @@ export default () => {
     const [items, setitems] = useState('');
 
     // Form
-    const [formDatas, setFormDatas] = useState([{ itemName: '', qty: '', itemUnit: '' }]);
+    const [formDatas, setFormDatas] = useState([{ itemName: '', qty: 0, itemUnit: '' }]);
     const [restaurantName, setRestaurantName] = useState('');
     const [date, setDate] = useState('');
 
@@ -232,7 +232,7 @@ export default () => {
             </Form.Group>
 
             Input Pembelian<br />
-            <Table striped bordered hover variant="dark">
+            <Table striped bordered hover variant="dark" responsive>
                 <thead>
                     <tr>
                         <th>Item</th>
@@ -277,7 +277,7 @@ export default () => {
                                         </InputGroup>
                                     </td>
                                     <td>{formData.itemUnit}</td>
-                                    <td><Form.Control type="number" value={formData.qty} onChange={(e) => setFormDataQty(index, e.target.value)} /></td>
+                                    <td><Form.Control type="number" value={Number(formData.qty).toString()} onChange={(e) => setFormDataQty(index, e.target.value)} /></td>
                                     <td>
                                         <Button onClick={() => removeFormRow(index)} variant="danger" block>-</Button>
                                     </td>
