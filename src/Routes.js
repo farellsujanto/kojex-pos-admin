@@ -12,16 +12,6 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/404Page';
 
-import OrderListPage from './pages/OrderListPage';
-import OrderAddPage from './pages/OrderAddPage';
-
-import ShoppingListPage from './pages/ShoppingListPage';
-import ShoppingAddPage from './pages/ShoppingAddPage';
-
-import ProductListPage from './pages/ProductListPage';
-import UserListPage from './pages/UserListPage';
-
-import RestaurantListPage from './pages/RestaurantListPage';
 
 function preparePage(children) {
 	return (
@@ -50,20 +40,6 @@ function getPath(path) {
 	switch (path) {
 		case '/':
 			return <HomePage />
-		case '/order/list':
-			return <OrderListPage />;
-		case '/order/add':
-			return <OrderAddPage />;
-		case '/shopping/list':
-			return <ShoppingListPage />;
-		case '/shopping/add':
-			return <ShoppingAddPage />;
-		case '/product/list':
-			return <ProductListPage />;
-		case '/user/list':
-			return <UserListPage />;
-		case '/restaurant/list':
-			return <RestaurantListPage />;
 		default:
 			return <NotFoundPage />;
 	}

@@ -105,7 +105,7 @@ export default () => {
                     Home
                 </Button>
                 <br />
-                {
+                {/* {
                     role !== 'none' ?
                         <>
                             <OrderAccordion />
@@ -113,7 +113,7 @@ export default () => {
                         </> : null
                 }
 
-                {role === 'admin' ? <MaintenanceAccordion /> : null}
+                {role === 'admin' ? <MaintenanceAccordion /> : null} */}
             </Accordion>
         </Container>
     );
