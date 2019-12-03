@@ -36,7 +36,7 @@ function preparePage(children) {
 	);
 }
 
-function getPath(path) {
+function getLoggedInPath(path) {
 	switch (path) {
 		case '/':
 			return <HomePage />
@@ -45,14 +45,20 @@ function getPath(path) {
 	}
 }
 
+function getNotLoggedInPath(path) {
+	switch (path) {
+		case '/':
+			return <LoginPage />
+		default:
+			return <LoginPage />;
+	}
+}
+
 export default function Routes() {
 	const [path] = useContext(PathContext);
 	const [auth] = useContext(AuthContext);
 
-	if (!auth) {
-		return <LoginPage />;
-	}
+	if (!auth) { return getNotLoggedInPath(path); }
 
-	return preparePage(getPath(path));
-
+	return preparePage(getLoggedInPath(path));
 }

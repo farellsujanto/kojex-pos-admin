@@ -6,7 +6,7 @@ import { AuthContext } from '../Context';
 
 export default ({ children }) => {
 
-    const [auth, setAuth] = useState(true);
+    const [auth, setAuth] = useState(false);
 
     useEffect(() => {
 		// const unsubscribeAuthListener = firebaseApp.auth().onAuthStateChanged((user) => {
