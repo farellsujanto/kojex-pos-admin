@@ -8,11 +8,10 @@ const DOMAIN_EXTENSION = "decodesmedia.com";
 
 export default () => {
 
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     function signIn() {
-        const email = username + "@" + DOMAIN_EXTENSION;
         
         firebaseApp.auth().signInWithEmailAndPassword(email, password)
         .catch((error) => {
@@ -27,7 +26,7 @@ export default () => {
                     <Jumbotron>
                         <Col>
                             <Form.Label>Username</Form.Label>
-                            <Form.Control onChange={(e) => setUsername(e.target.value)} type="text" />
+                            <Form.Control onChange={(e) => setEmail(e.target.value)} type="text" />
                             <Form.Label>Password</Form.Label>
                             <Form.Control onChange={(e) => setPassword(e.target.value)}  type="password" />
                             <Button className="mt-5" variant="primary" block onClick={signIn}>Login</Button>
