@@ -108,6 +108,19 @@ function ServiceMenu() {
     );
 }
 
+function StaffMenu() {
+
+    const [, setPath] = useContext(PathContext);
+
+    return (
+        <>
+            <Button variant="light" onClick={() => setPath('/staffs/list')} block>
+                Staff
+            </Button>
+        </>
+    );
+}
+
 export default () => {
 
     const [, setPath] = useContext(PathContext);
@@ -121,6 +134,8 @@ export default () => {
                 </Button>
                 <br />
                 <ServiceMenu />
+                <br />
+                <StaffMenu />
                 {/* {
                     role !== 'none' ?
                         <>

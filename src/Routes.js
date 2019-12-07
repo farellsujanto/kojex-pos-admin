@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage';
 
 import HomePage from './pages/HomePage';
 import ServiceList from './pages/ServiceList';
+import StaffList from './pages/StaffList';
 import NotFoundPage from './pages/404Page';
 
 
@@ -43,6 +44,8 @@ function getLoggedInPath(path) {
 			return <HomePage />
 		case '/service/list':
 			return <ServiceList />
+		case '/staffs/list':
+			return <StaffList />
 		default:
 			return <NotFoundPage />;
 	}
