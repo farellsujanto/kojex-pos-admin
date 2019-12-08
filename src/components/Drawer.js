@@ -121,6 +121,19 @@ function StaffMenu() {
     );
 }
 
+function ComissionMenu() {
+
+    const [, setPath] = useContext(PathContext);
+
+    return (
+        <>
+            <Button variant="light" onClick={() => setPath('/comission/list')} block>
+                Komisi
+            </Button>
+        </>
+    );
+}
+
 export default () => {
 
     const [, setPath] = useContext(PathContext);
@@ -136,6 +149,9 @@ export default () => {
                 <ServiceMenu />
                 <br />
                 <StaffMenu />
+
+                <br />
+                <ComissionMenu />
                 {/* {
                     role !== 'none' ?
                         <>

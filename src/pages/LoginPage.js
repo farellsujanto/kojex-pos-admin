@@ -4,8 +4,6 @@ import { firebaseApp } from '../utils/Firebase';
 
 import { Container, Jumbotron, Row, Col, Form, Button } from 'react-bootstrap';
 
-const DOMAIN_EXTENSION = "decodesmedia.com";
-
 export default () => {
 
     const [email, setEmail] = useState('');

@@ -9,7 +9,7 @@ export default () => {
     const [staffs, setStaffs] = useState([[]]);
 
     useEffect(() => {
-        const unsubscribeServices = firebaseApp.firestore()
+        const unsubscribeStaffs = firebaseApp.firestore()
             .collection('clinics')
             .doc("GABRIEL")
             .collection("staffs")
@@ -26,7 +26,7 @@ export default () => {
                 });
                 setStaffs(newStaffs);
             });
-        return () => unsubscribeServices();
+        return () => unsubscribeStaffs();
     }, []);
 
     const headers = ["#", "Nama", "Pekerjan"];

@@ -5,7 +5,7 @@ import { PathContext, AuthContext } from './store/Context';
 import Drawer from './components/Drawer';
 import NavbarComponent from './components/NavbarComponent';
 
-import { Container, Row, Col, Jumbotron } from 'react-bootstrap';
+import { Row, Col, Jumbotron } from 'react-bootstrap';
 
 import LoginPage from './pages/LoginPage';
 
@@ -13,6 +13,7 @@ import HomePage from './pages/HomePage';
 import ServiceList from './pages/ServiceList';
 import StaffList from './pages/StaffList';
 import NotFoundPage from './pages/404Page';
+import ComissionListPage from './pages/ComissionListPage';
 
 
 function preparePage(children) {
@@ -41,11 +42,13 @@ function preparePage(children) {
 function getLoggedInPath(path) {
 	switch (path) {
 		case '/':
-			return <HomePage />
+			return <HomePage />;
 		case '/service/list':
-			return <ServiceList />
+			return <ServiceList />;
 		case '/staffs/list':
-			return <StaffList />
+			return <StaffList />;
+		case '/comission/list':
+			return <ComissionListPage />;
 		default:
 			return <NotFoundPage />;
 	}
