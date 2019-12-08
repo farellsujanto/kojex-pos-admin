@@ -134,7 +134,7 @@ function DataTables({ items, headers, suffix }) {
     return (
         <Container>
             <Row>
-                <Col md={1}>Entries</Col>
+                <Col md={2}>Entries</Col>
                 <Col md={2}>
                     <Form.Control
                         placeholder="Entries"
@@ -143,7 +143,7 @@ function DataTables({ items, headers, suffix }) {
                         onChange={(e) => setEntries(e.target.value)}
                     />
                 </Col>
-                <Col md={{ span: 1, offset: 4 }}>Search</Col>
+                <Col md={{ span: 2, offset: 2 }}>Search</Col>
                 <Col md={4}>
                     <Form.Control
                         placeholder="Search..."
@@ -152,7 +152,7 @@ function DataTables({ items, headers, suffix }) {
                 </Col>
             </Row>
             <Row className="mt-3">
-                <Table striped border="true" hover variant="dark">
+                <Table striped border="true" hover variant="dark" responsive>
                     <TableHead
                         headers={headers}
                         sortDataByIndex={sortDataByIndex}

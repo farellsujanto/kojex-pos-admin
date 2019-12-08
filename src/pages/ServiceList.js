@@ -4,6 +4,12 @@ import { firebaseApp } from '../utils/Firebase';
 
 import DataTables from '../components/DataTables';
 
+import {
+    Card,
+    CardHeader,
+    Col
+} from "reactstrap";
+
 export default () => {
 
     const [services, setServices] = useState([[]]);
@@ -37,9 +43,16 @@ export default () => {
     const suffix = ["", "", "CURR", " %", " %", " %", ""];
 
     return (
-        <div>
-            <DataTables items={services} headers={headers} suffix={suffix} />
-        </div>
+        <>
+            <Col>
+                <Card className="shadow">
+                    <CardHeader className="border-0">
+                        <h3 className="mb-0">Card tables</h3>
+                    </CardHeader>
+                    <DataTables items={services} headers={headers} suffix={suffix} />
+                </Card>
+            </Col>
+        </>
 
     );
 }

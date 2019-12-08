@@ -2,13 +2,19 @@ import React, { useState, useEffect } from 'react';
 
 import { firebaseApp } from '../utils/Firebase';
 
+import {
+    Card,
+    CardHeader,
+    Col
+} from "reactstrap";
+
 import DataTables from '../components/DataTables';
 
 export default () => {
 
-    const [staffs, setStaffs] = useState([[]]);
+    // const [staffs, setStaffs] = useState([[]]);
 
-    const [salesDatas, setSalesDatas] = useState([]);
+    // const [salesDatas, setSalesDatas] = useState([]);
     const [comissionDatas, setComissionDatas] = useState([]);
 
     useEffect(() => {
@@ -19,7 +25,7 @@ export default () => {
             .onSnapshot((snapshot) => {
                 let newComissions = [];
                 snapshot.forEach((snap) => {
-                    
+
                     snap.data().sales.forEach((sale) => {
                         if (sale.fee.beautician) {
                             newComissions.push({
@@ -54,7 +60,7 @@ export default () => {
                             });
                         }
                     });
-                    
+
                 });
                 setComissionDatas(newComissions);
             });
@@ -78,12 +84,18 @@ export default () => {
     }
 
     const headers = ["#", "Tanggal", "Nama", "Jasa", "Perc", "Komisi"];
-    const suffix = ["", "", "", "", " %", ""];
+    const suffix = ["", "", "", "", " %", "CURR"];
 
     return (
-        <div>
-            <DataTables items={decodeComissionDatas} headers={headers} suffix={suffix} />
-        </div>
-
+        <>
+            <Col>
+                <Card className="shadow">
+                    <CardHeader className="border-0">
+                        <h3 className="mb-0">Card tables</h3>
+                    </CardHeader>
+                    <DataTables items={decodeComissionDatas} headers={headers} suffix={suffix} />
+                </Card>
+            </Col>
+        </>
     );
 }

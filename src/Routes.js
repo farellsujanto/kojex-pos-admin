@@ -2,11 +2,6 @@ import React, { useContext } from 'react';
 
 import { PathContext, AuthContext } from './store/Context';
 
-import Drawer from './components/Drawer';
-import NavbarComponent from './components/NavbarComponent';
-
-import { Row, Col, Jumbotron } from 'react-bootstrap';
-
 import LoginPage from './pages/LoginPage';
 
 import HomePage from './pages/HomePage';
@@ -15,27 +10,26 @@ import StaffList from './pages/StaffList';
 import NotFoundPage from './pages/404Page';
 import ComissionListPage from './pages/ComissionListPage';
 
+import AuthLayout from './layouts/AuthLayout';
+import AdminLayout from './layouts/AdminLayout';
+
 
 function preparePage(children) {
 	return (
 		<>
-			<Row>
-				<Col sm={3}>
-					<Drawer />
-				</Col>
-				<Col sm={9}>
-					<Col sm={12}>
-						<NavbarComponent />
-						<br />
-					</Col>
-					<Col sm={12}>
-						<Jumbotron>
-							{children}
-						</Jumbotron>
-					</Col>
-				</Col>
-			</Row>
+			<AdminLayout>
+				{children}
+			</AdminLayout>
 		</>
+
+	);
+}
+
+function prepareAuthPage(children) {
+	return (
+		<AuthLayout>
+			{children}
+		</AuthLayout>
 	);
 }
 
@@ -67,7 +61,7 @@ export default function Routes() {
 	const [path] = useContext(PathContext);
 	const [auth] = useContext(AuthContext);
 
-	if (!auth) { return getNotLoggedInPath(path); }
+	if (!auth) { return prepareAuthPage(getNotLoggedInPath(path)); }
 
 	return preparePage(getLoggedInPath(path));
 }

@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 import { firebaseApp } from '../utils/Firebase';
 
+import {
+    Card,
+    CardHeader,
+    Col
+} from "reactstrap";
+
 import DataTables from '../components/DataTables';
 
 export default () => {
@@ -33,9 +39,15 @@ export default () => {
     const suffix = ["", "", ""];
 
     return (
-        <div>
-            <DataTables items={staffs} headers={headers} suffix={suffix} />
-        </div>
-
+        <>
+            <Col>
+                <Card className="shadow">
+                    <CardHeader className="border-0">
+                        <h3 className="mb-0">Card tables</h3>
+                    </CardHeader>
+                    <DataTables items={staffs} headers={headers} suffix={suffix} />
+                </Card>
+            </Col>
+        </>
     );
 }
