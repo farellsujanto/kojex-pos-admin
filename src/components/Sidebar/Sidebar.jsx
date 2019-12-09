@@ -187,6 +187,11 @@ function Sidebar() {
               path="/comission/list"
             />
 
+            <NavigationItem
+              title="Sales List"
+              path="/sales/list"
+            />
+
           </Nav>
 
           {/* <hr className="my-3" />

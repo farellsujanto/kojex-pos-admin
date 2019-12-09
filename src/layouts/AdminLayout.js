@@ -26,7 +26,7 @@ function AdminLayout({ children }) {
           </Container>
 
         <Container fluid>
-          <AdminFooter />
+          {/* <AdminFooter /> */}
         </Container>
       </div>
     </>

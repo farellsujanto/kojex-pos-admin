@@ -7,8 +7,10 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import ServiceList from './pages/ServiceList';
 import StaffList from './pages/StaffList';
-import NotFoundPage from './pages/404Page';
+import SalesListPage from './pages/SalesListPage';
 import ComissionListPage from './pages/ComissionListPage';
+
+import NotFoundPage from './pages/404Page';
 
 import AuthLayout from './layouts/AuthLayout';
 import AdminLayout from './layouts/AdminLayout';
@@ -43,6 +45,8 @@ function getLoggedInPath(path) {
 			return <StaffList />;
 		case '/comission/list':
 			return <ComissionListPage />;
+		case '/sales/list':
+			return <SalesListPage />;
 		default:
 			return <NotFoundPage />;
 	}
