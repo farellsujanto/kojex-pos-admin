@@ -1,0 +1,454 @@
+[
+    {
+        name: "Alterne Skincare Acne Night Cream",
+        nick: "CREAM MALAM ACNE",
+        priceList: [
+            {
+                size: "10gr",
+                price: 78000
+            }
+        ],
+        composition: "Salsphere SS 2 + Salisil 1 + Niacin 5 + Syricalm 5 + Bisabolol 0,5",
+        series: "ACNE SERIES",
+        stock: 0
+    },
+    {
+        name: "Alterne Skincare Acne Day Cream",
+        nick: "CREAM PAGI ACNE",
+        priceList: [
+            {
+                size: "10gr",
+                price: 52500
+            }
+        ],
+        composition: "Base Gel Silver + Niacin 5 + Salisil 0,5",
+        series: "ACNE SERIES",
+        stock: 0
+    },
+    {
+        name: "Alterne Skincare Brightening Night Cream",
+        nick: "CREAM MALAM WHITENING",
+        priceList: [
+            {
+                size: "10gr",
+                price: 79500
+            }
+        ],
+        composition: "sodium hyaluronate 0,08 + peptide2 + Kojic acid2 + arbutin2 + ascorbic acid 3 + retinol 0,5",
+        series: "LIGHTENING SERIES (melasma)",
+        stock: 0
+    },
+    {
+        name: "Alterne Skincare Lightening Night Cream",
+        nick: "CREAM MALAM WHITENING",
+        priceList: [
+            {
+                size: "10gr",
+                price: 120000
+            }
+        ],
+        composition: "Whitenol 0,8 + Chromo 0,1 + Decapeptide 0,1 + Day Moist 5 + Kojic 4 + Bisabolol + Niacin 5",
+        series: "LIGHTENING SERIES (melasma)",
+        stock: 0
+    },
+    {
+        name: "Alterne Skincare Brightening Day Cream",
+        nick: "CREAM PAGI WHITENING",
+        priceList: [
+            {
+                size: "10gr",
+                price: 81000
+            }
+        ],
+        composition: "Base Gel Gold + Arbutin 4 + Tranex 3 + Chromo 0,5 + Hyco 0,1 + Bisabolol 0,5",
+        series: "LIGHTENING SERIES (melasma)",
+        stock: 0
+    },
+    {
+        name: "Alterne Skincare Rejuvenate Night Cream",
+        nick: "CREAM MALAM REJUVE",
+        priceList: [
+            {
+                size: "10gr",
+                price: 96000
+            }
+        ],
+        composition: "Bioplavita 2 + Tripeptide 2 + Hexapeptide 2 + Centella 5 + Niacin 5",
+        series: "REJUVE SERIES",
+        stock: 0
+    },
+    {
+        name: "Alterne Skincare Rejuvenate Day Cream",
+        nick: "CREAM PAGI REJUVE",
+        priceList: [
+            {
+                size: "10gr",
+                price: 68000
+            }
+        ],
+        composition: "Base Gel Gold + Hexapeptide 2 + Collagen 2+ Chromo 0,5",
+        series: "REJUVE SERIES",
+        stock: 0
+    },
+    {
+        name: "Alterne Skincare Night Cream for Dry Skin",
+        nick: "CREAM MALAM",
+        priceList: [
+            {
+                size: "10gr",
+                price: 72000
+            }
+        ],
+        composition: "Gel Gold + Day moist 5 + Niacin 4 + Allwhite7 + H Et. Urea 5",
+        series: "DRY SKIN TYPE",
+        stock: 0
+    },
+    {
+        name: "Alterne Skincare Day Cream for Dry Skin",
+        nick: "CREAM PAGI",
+        priceList: [
+            {
+                size: "10gr",
+                price: 67500
+            }
+        ],
+        composition: "Base Sleeping Mask + Niacin 5 + Chromo 0,5",
+        series: "DRY SKIN TYPE",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Facial Wash for Oily Skin",
+        nick: "FACIAL WASH",
+        priceList: [
+            {
+                size: "60ml",
+                price: 45000
+            },
+            {
+                size: "100ml",
+                price: 60000
+            }
+        ],
+        composition: "Facial wash oily + Shimmer",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care AHA Facial Wash",
+        nick: "FACIAL WASH",
+        priceList: [
+            {
+                size: "60ml",
+                price: 45000
+            },
+            {
+                size: "100ml",
+                price: 60000
+            }
+        ],
+        composition: "Facial Wash AHA",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Charcoal OXY Microbubble",
+        nick: "FACIAL WASH",
+        priceList: [
+            {
+                size: "60ml",
+                price: 138000
+            }
+        ],
+        composition: "OXY Microbubble ",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care AHA Toner",
+        nick: "TONER",
+        priceList: [
+            {
+                size: "60ml",
+                price: 45000
+            },
+            {
+                size: "100ml",
+                price: 60000
+            }
+        ],
+        composition: "Face Toner AHA",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care RefreshingToner",
+        nick: "TONER",
+        priceList: [
+            {
+                size: "60ml",
+                price: 45000
+            },
+            {
+                size: "100ml",
+                price: 60000
+            }
+        ],
+        composition: "Face Toner Chamomile",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Sunscreen Oil Free",
+        nick: "SUNBLOCK",
+        priceList: [
+            {
+                size: "10gr",
+                price: 78000
+            }
+        ],
+        composition: "BB Flawless Natural + SPF 30",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Soft Peeling Gel",
+        nick: "PEELING",
+        priceList: [
+            {
+                size: "60ml",
+                price: 68000
+            },
+            {
+                size: "100ml",
+                price: 95000
+            }
+        ],
+        composition: "Soft Peeling Gel",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Vitamin C and Hyaluronic  Acid Serum",
+        nick: "SERUM",
+        priceList: [
+            {
+                size: "10ml",
+                price: 135000
+            }
+        ],
+        composition: "Vit. C 10 + Hyaluronic Acid",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care 3 in 1",
+        nick: "SERUM",
+        priceList: [
+            {
+                size: "10ml",
+                price: 115000
+            }
+        ],
+        composition: "Swertia Chirata Ext 1 + Sodium Hyaluronate 1 + Arbutin 2 + Gylcyrhiza Glabra Root Ext 2 + Porphyridium Cruentum Ext 3 + Glitter Gold",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Treatment Essence",
+        nick: "SERUM",
+        priceList: [
+            {
+                size: "10ml",
+                price: 120000
+            }
+        ],
+        composition: "Lactobacillus + Sarcosine + Niacin",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "24 K Alterne Skin Care Hyaluronic  Acid Serum",
+        nick: "SERUM",
+        priceList: [
+            {
+                size: "10ml",
+                price: 495000
+            }
+        ],
+        composition: "HA + Liftonin + SWT 7 + Serbuk 24K",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Acne Serum",
+        nick: "SERUM",
+        priceList: [
+            {
+                size: "10ml",
+                price: 93000
+            }
+        ],
+        composition: "Serum Gel + AHA 4 + Salisil 1 + Niacin 4 + Sulfur 2",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Shooting Cream",
+        nick: "SHOOTING CREAM ",
+        priceList: [
+            {
+                size: "10gr",
+                price: 79500
+            }
+        ],
+        composition: "Gel Gold + Aloe 2 + Centella 10",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Lip Cream",
+        nick: "LIP CREAM",
+        priceList: [
+            {
+                size: "10gr",
+                price: 86000
+            }
+        ],
+        composition: "Petroleum Jelly + SWT + Kojic 2",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Eye Gel",
+        nick: "SUPER EYE GEL",
+        priceList: [
+            {
+                size: "10gr",
+                price: 86000
+            }
+        ],
+        composition: "MDI Complex 3 + Liftonin 3 + Allwhite 2",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Make Up Remover",
+        nick: "MAKE UP REMOVER",
+        priceList: [
+            {
+                size: "60ml",
+                price: 69000
+            },
+            {
+                size: "100ml",
+                price: 96000
+            }
+        ],
+        composition: "Serum (two tone)",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Milk Cleanser",
+        nick: "MAKE UP REMOVER",
+        priceList: [
+            {
+                size: "60ml",
+                price: 48000
+            },
+            {
+                size: "100ml",
+                price: 60000
+            }
+        ],
+        composition: "Milk Cleanser",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Peel Off Glitter Gold",
+        nick: "MASKER",
+        priceList: [
+            {
+                size: "1kg",
+                price: 66000
+            }
+        ],
+        composition: "Peel Off Glitter Gold",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Peel Off Green Tea",
+        nick: "MASKER",
+        priceList: [
+            {
+                size: "1kg",
+                price: 66000
+            }
+        ],
+        composition: "Peel Off Green Tea",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Centella Asiatica Mask",
+        nick: "MASKER",
+        priceList: [
+            {
+                size: "1lembar",
+                price: 68000
+            }
+        ],
+        composition: "Kertas Centella + Chamomile",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Shooting Gel Mask",
+        nick: "MASKER",
+        priceList: [
+            {
+                size: "1lembar",
+                price: 75000
+            }
+        ],
+        composition: "Gel Centella + Chamomile",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Brightening Body Lotion",
+        nick: "BODY LOTION",
+        priceList: [
+            {
+                size: "60ml",
+                price: 135000
+            },
+            {
+                size: "100ml",
+                price: 210000
+            }
+        ],
+        composition: "Cocktail Whitening",
+        series: "",
+        stock: 0
+    },
+    {
+        name: "Alterne Skin Care Acne Body Lotion",
+        nick: "BODY LOTION",
+        priceList: [
+            {
+                size: "60ml",
+                price: 120000
+            },
+            {
+                size: "100ml",
+                price: 186000
+            }
+        ],
+        composition: "Cocktail Acne",
+        series: "",
+        stock: 0
+    }
+]

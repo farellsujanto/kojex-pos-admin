@@ -136,7 +136,7 @@ function UserSidebar() {
   );
 }
 
-function NavigationItem({ title, path }) {
+function NavigationItem({ title, path, icon }) {
 
   const [, setPath] = useContext(PathContext);
 
@@ -147,10 +147,10 @@ function NavigationItem({ title, path }) {
         onClick={() => setPath(path)}
         activeClassName="active"
       >
-        <i className="ni ni-tv-2 text-primary" />
-        {title}
+      <i className={"ni " + icon + " text-primary"} />
+      {title}
       </NavLink>
-    </NavItem>
+    </NavItem >
   );
 }
 
@@ -170,26 +170,37 @@ function Sidebar() {
             <NavigationItem
               title="Home"
               path="/"
+              icon="ni-tv-2"
             />
 
             <NavigationItem
               title="Service List"
               path="/service/list"
+              icon="ni-app text-pink"
             />
 
             <NavigationItem
               title="Staffs List"
               path="/staffs/list"
+              icon="ni-badge text-blue"
             />
 
             <NavigationItem
               title="Comisions List"
               path="/comission/list"
+              icon="ni-support-16 text-red"
             />
 
             <NavigationItem
               title="Sales List"
               path="/sales/list"
+              icon="ni-chart-bar-32 text-orange"
+            />
+
+            <NavigationItem
+              title="Items List"
+              path="/items/list"
+              icon="ni-box-2 text-orange"
             />
 
           </Nav>

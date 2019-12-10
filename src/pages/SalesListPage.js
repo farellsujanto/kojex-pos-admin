@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { SalesContext } from '../store/Context';
 
-import { firebaseApp } from '../utils/Firebase';
 
 import { Line } from 'react-chartjs-2';
 
@@ -21,22 +21,11 @@ export default () => {
 
     const [salesDatas, setSalesDatas] = useState([]);
     const [currYear, setCurrYear] = useState(0);
+    const [sales] = useContext(SalesContext);
 
     useEffect(() => {
-        const unsubscribeStaffs = firebaseApp.firestore()
-            .collection('clinics')
-            .doc("GABRIEL")
-            .collection("sales")
-            .onSnapshot((snapshot) => {
-                let newSalesDatas = [];
-                snapshot.forEach((snap) => {
-                    newSalesDatas.push(snap.data());
-
-                });
-                setSalesDatas(newSalesDatas);
-            });
-        return () => unsubscribeStaffs();
-    }, []);
+        setSalesDatas(sales);
+    }, [sales]);
 
     function decodeSalesDatas() {
         let output = [[]];

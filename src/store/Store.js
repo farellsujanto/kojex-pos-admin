@@ -2,17 +2,26 @@ import React from 'react';
 
 import PathProvider from './providers/PathProvider';
 import AuthProvider from './providers/AuthProvider';
-import RoleProvider from './providers/RoleProvider';
+import StaffProvider from './providers/StaffProvider';
+import SalesProvider from './providers/SalesProvider';
+import ItemsProvider from './providers/ItemsProvider';
+import ServiceProvider from './providers/ServiceProvider';
 
 const Store = ({ children }) => {
 
     return (
         <AuthProvider>
-            <RoleProvider>
-                <PathProvider>
-                    {children}
-                </PathProvider>
-            </RoleProvider>
+            <StaffProvider>
+                <SalesProvider>
+                    <ItemsProvider>
+                        <ServiceProvider>
+                            <PathProvider>
+                                {children}
+                            </PathProvider>
+                        </ServiceProvider>
+                    </ItemsProvider>
+                </SalesProvider>
+            </StaffProvider>
         </AuthProvider>
     );
 }

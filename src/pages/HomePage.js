@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { firebaseApp } from '../utils/Firebase';
 
 import {
     Button,
@@ -14,24 +16,35 @@ import {
     Col
 } from 'reactstrap';
 
-// import classnames from "classnames";
-// // javascipt plugin for creating charts
-// import Chart from "chart.js";
-// // react plugin used to create charts
 import {
-    // Line, 
     Bar,
 } from "react-chartjs-2";
 
 import {
-    // chartOptions,
-    // parseOptions,
-    // chartExample1,
     chartExample2
 } from "../variables/charts.jsx";
 
 
 export default () => {
+
+    useEffect(() => {
+        // const itemsRef = firebaseApp.firestore()
+        //     .collection('clinics')
+        //     .doc('GABRIEL')
+        //     .collection('items');
+        // datas.forEach((data) => {
+        //     itemsRef.add(data)
+        //         .then(() => {
+        //             console.log("ADDED")
+        //         })
+        //         .catch(() => {
+        //             console.log("ERROE")
+        //         })
+        // })
+
+    }, []);
+
+
     return (
         <>
 

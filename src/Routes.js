@@ -5,10 +5,11 @@ import { PathContext, AuthContext } from './store/Context';
 import LoginPage from './pages/LoginPage';
 
 import HomePage from './pages/HomePage';
-import ServiceList from './pages/ServiceList';
-import StaffList from './pages/StaffList';
+import ServiceListPage from './pages/ServiceListPage';
+import StaffListPage from './pages/StaffListPage';
 import SalesListPage from './pages/SalesListPage';
 import ComissionListPage from './pages/ComissionListPage';
+import ItemListPage from './pages/ItemListPage';
 
 import NotFoundPage from './pages/404Page';
 
@@ -40,13 +41,15 @@ function getLoggedInPath(path) {
 		case '/':
 			return <HomePage />;
 		case '/service/list':
-			return <ServiceList />;
+			return <ServiceListPage />;
 		case '/staffs/list':
-			return <StaffList />;
+			return <StaffListPage />;
 		case '/comission/list':
 			return <ComissionListPage />;
 		case '/sales/list':
 			return <SalesListPage />;
+		case '/items/list':
+			return <ItemListPage />;
 		default:
 			return <NotFoundPage />;
 	}
