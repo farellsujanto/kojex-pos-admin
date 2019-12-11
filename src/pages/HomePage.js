@@ -1,6 +1,7 @@
 import React from 'react';
 
 import SalesGraph from '../components/Graphs/SalesGraph';
+
 import {
     Button,
     Card,
@@ -207,9 +208,6 @@ export default () => {
                     </Card>
                 </Col>
             </Row>
-
-
         </>
-
     );
 }

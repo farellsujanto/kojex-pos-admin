@@ -68,9 +68,9 @@ function Login() {
                                     </FormGroup>
 
                                     <div className="text-center">
-                                        <Button className="my-4" color="primary" type="button" onClick={signIn}>
+                                        <Button className="my-4" color="success" type="button" onClick={signIn}>
                                             Sign in
-                                            </Button>
+                                        </Button>
                                     </div>
                                 </Form>
                             </CardBody>
