@@ -1,120 +1,24 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { firebaseApp } from '../utils/Firebase';
-
+import SalesGraph from '../components/Graphs/SalesGraph';
 import {
     Button,
     Card,
     CardHeader,
-    CardBody,
-    NavItem,
-    NavLink,
-    Nav,
     Progress,
     Table,
     Row,
     Col
 } from 'reactstrap';
 
-import {
-    Bar,
-} from "react-chartjs-2";
-
-import {
-    chartExample2
-} from "../variables/charts.jsx";
-
-
 export default () => {
-
-    useEffect(() => {
-        // const itemsRef = firebaseApp.firestore()
-        //     .collection('clinics')
-        //     .doc('GABRIEL')
-        //     .collection('items');
-        // datas.forEach((data) => {
-        //     itemsRef.add(data)
-        //         .then(() => {
-        //             console.log("ADDED")
-        //         })
-        //         .catch(() => {
-        //             console.log("ERROE")
-        //         })
-        // })
-
-    }, []);
-
 
     return (
         <>
+            <Col className="mb-5 mb-xl-0" xl="12">
+                <SalesGraph />
+            </Col>
 
-            <Row>
-                <Col className="mb-5 mb-xl-0" xl="8">
-                    <Card className="bg-gradient-default shadow">
-                        <CardHeader className="bg-transparent">
-                            <Row className="align-items-center">
-                                <div className="col">
-                                    <h6 className="text-uppercase text-light ls-1 mb-1">
-                                        Overview
-                                        </h6>
-                                    <h2 className="text-white mb-0">Sales value</h2>
-                                </div>
-                                <div className="col">
-                                    <Nav className="justify-content-end" pills>
-                                        <NavItem>
-                                            <NavLink
-                                                className="py-2 px-3"
-                                                href="#pablo"
-                                                onClick={e => this.toggleNavs(e, 1)}
-                                            >
-                                                <span className="d-none d-md-block">Month</span>
-                                                <span className="d-md-none">M</span>
-                                            </NavLink>
-                                        </NavItem>
-                                        <NavItem>
-                                            <NavLink
-                                                className="py-2 px-3"
-                                                data-toggle="tab"
-                                                href="#pablo"
-                                                onClick={e => this.toggleNavs(e, 2)}
-                                            >
-                                                <span className="d-none d-md-block">Week</span>
-                                                <span className="d-md-none">W</span>
-                                            </NavLink>
-                                        </NavItem>
-                                    </Nav>
-                                </div>
-                            </Row>
-                        </CardHeader>
-                        <CardBody>
-
-                        </CardBody>
-                    </Card>
-                </Col>
-                <Col xl="4">
-                    <Card className="shadow">
-                        <CardHeader className="bg-transparent">
-                            <Row className="align-items-center">
-                                <div className="col">
-                                    <h6 className="text-uppercase text-muted ls-1 mb-1">
-                                        Performance
-                      </h6>
-                                    <h2 className="mb-0">Total orders</h2>
-                                </div>
-                            </Row>
-                        </CardHeader>
-                        <CardBody>
-                            {/* Chart */}
-                            <div className="chart">
-                                <Bar
-                                    data={chartExample2.data}
-                                    options={chartExample2.options}
-                                />
-                            </div>
-                        </CardBody>
-                    </Card>
-                </Col>
-            </Row>
             <Row className="mt-5">
                 <Col className="mb-5 mb-xl-0" xl="8">
                     <Card className="shadow">

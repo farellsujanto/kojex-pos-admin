@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ItemsContext } from '../store/Context';
 
-import { firebaseApp } from '../utils/Firebase';
-
 import DataTables from '../components/DataTables';
 
 import {

@@ -56,7 +56,7 @@ export default () => {
         });
         setComissionDatas(newComissions);
 
-    }, []);
+    }, [sales]);
 
     function decodeComissionDatas() {
         let output = [[]];
