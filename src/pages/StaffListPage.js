@@ -74,7 +74,7 @@ export default () => {
         <>
             <Col>
                 <Card className="shadow">
-                <CardHeader className="border-0">
+                    <CardHeader className="border-0">
                         <div className="col">
                             <h3 className="mb-0">Staff List</h3>
                         </div>

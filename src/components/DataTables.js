@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Table, Container, Form, Col, Row, Button } from 'react-bootstrap';
+import { Table, Form, Col, Row, Button } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
@@ -146,7 +146,7 @@ function DataTables({ items, headers, suffix }) {
 
 
     return (
-        <Container>
+        <Col md={12}>
             <Row>
                 <Col md={1}>Entries</Col>
                 <Col md={2}>
@@ -166,6 +166,7 @@ function DataTables({ items, headers, suffix }) {
                 </Col>
             </Row>
             <Row className="mt-3">
+                <Col>
                 <Table striped border="true" hover variant="dark" responsive>
                     <TableHead
                         headers={headers}
@@ -180,12 +181,16 @@ function DataTables({ items, headers, suffix }) {
                         suffix={suffix}
                     />
                 </Table>
+                </Col>
             </Row>
             <Row>
                 <Col md={4}>
                     Showing {currentPage * entries + 1} to {((currentPage + 1) * entries) > items.length ? items.length : (currentPage + 1) * entries} of {items.length} entries
                 </Col>
-                <Col md={{ span: 4, offset: 4 }}>
+                
+            </Row>
+            <Row>
+            <Col md={4}>
                     <ReactPaginate
                         previousLabel={'<'}
                         nextLabel={'>'}
@@ -203,7 +208,7 @@ function DataTables({ items, headers, suffix }) {
                 </Col>
             </Row>
 
-        </Container>
+        </Col>
     );
 }
 

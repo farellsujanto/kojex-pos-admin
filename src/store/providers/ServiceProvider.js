@@ -18,7 +18,9 @@ export default ({ children }) => {
                 .onSnapshot((snapshot) => {
                     let newServices = [];
                     snapshot.forEach((snap) => {
-                        newServices.push(snap.data());
+                        let newService = snap.data();
+                        newService.id = snap.id;
+                        newServices.push(newService);
                     });
                     setServices(newServices);
                 });
