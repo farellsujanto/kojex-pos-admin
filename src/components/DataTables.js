@@ -1,31 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Table, Container, Form, Col, Row } from 'react-bootstrap';
+import { Table, Container, Form, Col, Row, Button } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 
-import { faSort,faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 
 
 function TableHead({ headers, sortDataByIndex, sortIndex, repeatedIndex }) {
     return (
         <thead>
             <tr>
-            
+
                 {
                     headers ?
                         headers.map((header, index) => {
                             if (sortIndex === index) {
                                 if (repeatedIndex) {
                                     return (
-                                        <th key={index} style={{cursor: 'pointer'}} onClick={() => sortDataByIndex(index)}>{header} <FontAwesomeIcon icon={faSortDown} /></th>
+                                        <th key={index} style={{ cursor: 'pointer' }} onClick={() => sortDataByIndex(index)}>{header} <FontAwesomeIcon icon={faSortDown} /></th>
                                     );
                                 }
                                 return (
-                                    <th key={index} style={{cursor: 'pointer'}} onClick={() => sortDataByIndex(index)}>{header} <FontAwesomeIcon icon={faSortUp} /></th>
+                                    <th key={index} style={{ cursor: 'pointer' }} onClick={() => sortDataByIndex(index)}>{header} <FontAwesomeIcon icon={faSortUp} /></th>
                                 );
                             }
                             return (
-                                <th key={index} style={{cursor: 'pointer'}} onClick={() => sortDataByIndex(index)}>{header} <FontAwesomeIcon icon={faSort} /></th>
+                                <th key={index} style={{ cursor: 'pointer' }} onClick={() => sortDataByIndex(index)}>{header} <FontAwesomeIcon icon={faSort} /></th>
                             );
                         }) : null
                 }
@@ -34,7 +34,7 @@ function TableHead({ headers, sortDataByIndex, sortIndex, repeatedIndex }) {
     );
 }
 
-function TableRow({ datas, suffix }) {
+function TableRow({ datas, suffix, rowIndex }) {
 
     function formatNumber(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -47,6 +47,11 @@ function TableRow({ datas, suffix }) {
                     datas.map((data, index) => {
                         if (suffix[index] === "CURR") {
                             return (<td key={index}>{formatNumber(Number(data))}</td>);
+                        }
+                        if (suffix[index] === "FUN") {
+                            console.log(data)
+                            // return (<td key={index}><Button onClick={() => data.fun(rowIndex)}>{data.name}</Button></td>);
+                            return (<td key={index}><Button variant={data.variant} onClick={data.fun}>{data.name}</Button></td>);
                         }
                         return (<td key={index}>{data}{suffix[index]}</td>);
                     }) : null
@@ -62,7 +67,14 @@ function TableBody({ items, entries, currentPage, suffix }) {
         let components = [];
         const counter = entries > items.length ? items.length : entries;
         for (let i = 0; i < counter; i++) {
-            components.push(<TableRow key={i} datas={items[i + entries * currentPage]} suffix={suffix} />);
+            components.push(
+                <TableRow
+                    key={i}
+                    datas={items[i + entries * currentPage]}
+                    suffix={suffix}
+                    rowIndex={i}
+                />
+            );
         }
         return components;
     }
@@ -131,10 +143,12 @@ function DataTables({ items, headers, suffix }) {
         setItemsToShow(newItems);
     }
 
+
+
     return (
         <Container>
             <Row>
-                <Col md={2}>Entries</Col>
+                <Col md={1}>Entries</Col>
                 <Col md={2}>
                     <Form.Control
                         placeholder="Entries"
@@ -143,7 +157,7 @@ function DataTables({ items, headers, suffix }) {
                         onChange={(e) => setEntries(e.target.value)}
                     />
                 </Col>
-                <Col md={{ span: 2, offset: 2 }}>Search</Col>
+                <Col md={{ span: 1, offset: 4 }}>Search</Col>
                 <Col md={4}>
                     <Form.Control
                         placeholder="Search..."
