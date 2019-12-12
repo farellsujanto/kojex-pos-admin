@@ -187,7 +187,6 @@ function SalesGraph() {
                 cleanDayData[day] = cleanDayData[day] + cleanTotalPrice(salesData.sales);
             }
         });
-        console.log("DAY", cleanDayData)
 
         const chartData = {
             labels: dayLabel,
@@ -254,8 +253,6 @@ function SalesGraph() {
             }
         });
 
-
-
         const chartData = {
             labels: yearLabel,
             datasets: [
@@ -303,7 +300,6 @@ function SalesGraph() {
                 }
             ]
         };
-
 
         return chartData;
     }

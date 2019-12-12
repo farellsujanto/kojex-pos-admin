@@ -8,6 +8,7 @@ import DataTables from '../components/DataTables';
 import DeleteModal from '../components/Modals/DeleteModal';
 import AddItemModal from '../components/Modals/AddItemModal';
 import EditItemModal from '../components/Modals/EditItemModal';
+import EditStockModal from '../components/Modals/EditStockModal';
 
 import {
     Card,
@@ -18,8 +19,8 @@ import {
     Button,
 } from "reactstrap";
 
-const HEADERS = ["#", "Nama Produk", "Nama Dagang", "Stock", "", ""];
-const SUFFIX = ["", "", "", "", "FUN", "FUN"];
+const HEADERS = ["#", "Nama Produk", "Nama Dagang", "Ukuran", "Stock", "", "", ""];
+const SUFFIX = ["", "", "", "", "", "FUN", "FUN", "FUN"];
 
 
 function ItemListPage() {
@@ -30,9 +31,10 @@ function ItemListPage() {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEditStockModal, setShowEditStockModal] = useState(false);
     const [itemToEdit, setItemToEdit] = useState({
         composition: '', name: '', nick: '', series: '', stock: 0, priceList: []
-    }); 
+    });
     const [idToDelete, setIdToDelete] = useState('');
 
     useEffect(() => {
@@ -42,7 +44,15 @@ function ItemListPage() {
                 index + 1,
                 item.nick,
                 item.name,
+                item.size,
                 item.stock,
+                {
+                    fun: () => {
+                        prepareToEditStock(item);
+                    },
+                    name: "Edit Stock",
+                    variant: "success"
+                },
                 {
                     fun: () => {
                         prepareToEdit(item);
@@ -71,6 +81,11 @@ function ItemListPage() {
     function prepareForDeletion(id) {
         setIdToDelete(id);
         setShowDeleteModal(true)
+    }
+
+    function prepareToEditStock(item) {
+        setItemToEdit(item);
+        setShowEditStockModal(true);
     }
 
     function deleteItemFromId() {
@@ -122,6 +137,11 @@ function ItemListPage() {
                 show={showDeleteModal}
                 handleClose={() => setShowDeleteModal(false)}
                 handleConfirmation={deleteItemFromId}
+            />
+            <EditStockModal
+                show={showEditStockModal}
+                handleClose={() => setShowEditStockModal(false)}
+                itemData={itemToEdit}
             />
         </>
     );

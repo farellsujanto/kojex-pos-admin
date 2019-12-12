@@ -2,6 +2,8 @@ import React from 'react';
 
 import SalesGraph from '../components/Graphs/SalesGraph';
 
+// import { firebaseApp } from '../utils/Firebase';
+
 import {
     Button,
     Card,

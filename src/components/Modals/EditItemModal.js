@@ -10,8 +10,6 @@ import {
 import {
     Col,
     Button,
-    Table
-
 } from "reactstrap";
 
 function EditItemModal({ show, handleClose, itemData }) {
@@ -21,7 +19,8 @@ function EditItemModal({ show, handleClose, itemData }) {
     const [nick, setNick] = useState('');
     const [composition, setComposition] = useState('');
     const [series, setSeries] = useState('');
-    const [priceList, setPriceList] = useState([{ size: '', price: 0 }]);
+    const [size, setSize] = useState('');
+    const [price, setPrice] = useState(0);
 
     useEffect(() => {
         if (itemData) {
@@ -30,7 +29,8 @@ function EditItemModal({ show, handleClose, itemData }) {
             setNick(itemData.nick);
             setComposition(itemData.composition);
             setSeries(itemData.series);
-            setPriceList(itemData.priceList);
+            setSize(itemData.size);
+            setPrice(itemData.price)
         }
     }, [itemData]);
 
@@ -40,17 +40,9 @@ function EditItemModal({ show, handleClose, itemData }) {
         setNick('');
         setComposition('');
         setSeries('');
-        setPriceList([{ size: '', price: 0 }]);
+        setSize('');
+        setPrice(0);
         handleClose();
-    }
-
-    function validatePriceList() {
-        for (let i = 0; i < priceList.length; i++) {
-            if (priceList[i].size === '' || priceList[i].price === 0) {
-                return false;
-            }
-        }
-        return true;
     }
 
     function updateData() {
@@ -71,7 +63,7 @@ function EditItemModal({ show, handleClose, itemData }) {
             window.alert("Tolong isi kolom yang kosong");
             return;
         }
-        if (!validatePriceList()) {
+        if (size === '') {
             window.alert("Tolong isi kolom yang kosong");
             return;
         }
@@ -81,7 +73,8 @@ function EditItemModal({ show, handleClose, itemData }) {
             nick: nick,
             series: series,
             composition: composition,
-            priceList: priceList
+            size: size,
+            price: price
         }
         const itemRef = firebaseApp.firestore()
             .collection('clinics')
@@ -91,34 +84,13 @@ function EditItemModal({ show, handleClose, itemData }) {
 
         itemRef.update(data)
             .then(() => {
+                closeModal();
                 window.alert("Data berhasil di edit");
             })
             .catch((e) => {
                 console.log(e);
                 window.alert("Terjadi kesalahan, silahkan coba lagi.");
             });
-    }
-
-    function addPriceListRow() {
-        setPriceList([...priceList, { size: '', price: 0 }]);
-    }
-
-    function setPriceListSize(index, value) {
-        let newPriceList = [...priceList];
-        newPriceList[index].size = value;
-        setPriceList(newPriceList);
-    }
-
-    function setPriceListPrice(index, value) {
-        let newPriceList = [...priceList];
-        newPriceList[index].price = value;
-        setPriceList(newPriceList);
-    }
-
-    function removePriceListRow(index) {
-        let newPriceList = [...priceList];
-        newPriceList.splice(index, 1);
-        setPriceList(newPriceList);
     }
 
     return (
@@ -171,50 +143,27 @@ function EditItemModal({ show, handleClose, itemData }) {
                         />
                     </Col>
                 </Form.Group>
-                <Table>
-                    <thead>
-                        <tr>
-                            <th>Ukuran</th>
-                            <th>Harga</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            priceList ?
-                                priceList.map((list, index) => {
-                                    return (
-                                        <tr ke={index}>
-                                            <td>
-                                                <Form.Control
-                                                    value={list.size}
-                                                    placeholder="10ml"
-                                                    type="text"
-                                                    onChange={(e) => setPriceListSize(index, e.target.value)}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Form.Control
-                                                    value={list.price}
-                                                    type="number"
-                                                    onChange={(e) => setPriceListPrice(index, Number(e.target.value))}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Button color="danger" onClick={() => removePriceListRow(index)}>-</Button>
-                                            </td>
-                                        </tr>
-                                    );
-                                }) : null
-                        }
-                    </tbody>
-                </Table>
                 <Form.Group>
-                    <Col><Button color="success" onClick={addPriceListRow}>+</Button></Col>
+                    <Col><Form.Label>Harga</Form.Label></Col>
+                    <Col>
+                        <Form.Control
+                            value={price}
+                            type="number"
+                            onChange={(e) => setPrice(Number(e.target.value))}
+                        />
+                    </Col>
                 </Form.Group>
-
-
-
+                <Form.Group>
+                    <Col><Form.Label>Size</Form.Label></Col>
+                    <Col>
+                        <Form.Control
+                            value={size}
+                            placeholder="10ml"
+                            type="text"
+                            onChange={(e) => setSize(e.target.value)}
+                        />
+                    </Col>
+                </Form.Group>
             </Modal.Body>
             <Modal.Footer>
                 <Button color="link" onClick={closeModal}>Close</Button>
