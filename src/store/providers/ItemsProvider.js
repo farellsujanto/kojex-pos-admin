@@ -19,7 +19,9 @@ export default ({ children }) => {
                 .onSnapshot((snapshot) => {
                     let newItems = [];
                     snapshot.forEach((snap) => {
-                        newItems.push(snap.data());
+                        let newData = snap.data();
+                        newData.id = snap.id;
+                        newItems.push(newData);
                     });
                     setItems(newItems);
                 });

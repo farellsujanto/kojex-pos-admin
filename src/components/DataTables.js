@@ -49,7 +49,6 @@ function TableRow({ datas, suffix, rowIndex }) {
                             return (<td key={index}>{formatNumber(Number(data))}</td>);
                         }
                         if (suffix[index] === "FUN") {
-                            console.log(data)
                             // return (<td key={index}><Button onClick={() => data.fun(rowIndex)}>{data.name}</Button></td>);
                             return (<td key={index}><Button variant={data.variant} onClick={data.fun}>{data.name}</Button></td>);
                         }
