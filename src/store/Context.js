@@ -6,4 +6,5 @@ export const RoleContext = createContext('Role');
 export const StaffContext = createContext('Staff');
 export const SalesContext = createContext('Sales');
 export const ItemsContext = createContext('Items');
+export const PackagesContext = createContext('Packages');
 export const ServiceContext = createContext('Service');

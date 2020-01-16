@@ -10,25 +10,24 @@ import Header from "../components/Headers/Header.jsx";
 function AdminLayout({ children }) {
   return (
     <>
-      <Sidebar
-        logo={{
-          innerLink: "/admin/index",
-          imgSrc: require("../assets/img/brand/argon-react.png"),
-          imgAlt: "..."
-        }}
-      />
-      <div className="main-content">
+      <Sidebar />
+      <div className="main-content" style={bgImageStyle}>
         <AdminNavbar />
         <Header />
-            <Container className="mt--7" fluid>
+        <Container className="mt--7" fluid >
           {children}
-          </Container>
-
-        <Container fluid>
         </Container>
       </div>
     </>
   );
+}
+
+const bgImageStyle = {
+  backgroundImage: `url(require("../assets/img/bg.png"))`,
+  height: '100%',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'cover',
 }
 
 export default AdminLayout;

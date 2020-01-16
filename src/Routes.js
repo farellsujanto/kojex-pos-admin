@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import ServiceListPage from './pages/ServiceListPage';
 import StaffListPage from './pages/StaffListPage';
+import PackageListPage from './pages/PackageListPage';
 import SalesListPage from './pages/SalesListPage';
 import ComissionListPage from './pages/ComissionListPage';
 import ItemListPage from './pages/ItemListPage';
@@ -15,7 +16,6 @@ import NotFoundPage from './pages/404Page';
 
 import AuthLayout from './layouts/AuthLayout';
 import AdminLayout from './layouts/AdminLayout';
-
 
 function preparePage(children) {
 	return (
@@ -50,6 +50,8 @@ function getLoggedInPath(path) {
 			return <SalesListPage />;
 		case '/items/list':
 			return <ItemListPage />;
+		case '/package/list':
+			return <PackageListPage />;
 		default:
 			return <NotFoundPage />;
 	}

@@ -147,8 +147,8 @@ function NavigationItem({ title, path, icon }) {
         onClick={() => setPath(path)}
         activeClassName="active"
       >
-      <i className={"ni " + icon + " text-primary"} />
-      {title}
+        <i className={"ni " + icon + " text-primary"} />
+        {title}
       </NavLink>
     </NavItem >
   );
@@ -200,6 +200,12 @@ function Sidebar() {
             <NavigationItem
               title="Items List"
               path="/items/list"
+              icon="ni-box-2 text-orange"
+            />
+
+            <NavigationItem
+              title="Package List"
+              path="/package/list"
               icon="ni-box-2 text-orange"
             />
 

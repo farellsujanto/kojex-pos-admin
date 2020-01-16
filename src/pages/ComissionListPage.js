@@ -14,6 +14,10 @@ export default () => {
     const [sales] = useContext(SalesContext);
     const [comissionDatas, setComissionDatas] = useState([]);
 
+    function getDiscountedPrice(price, disc) {
+        return (price * (100 - disc) / 100)
+    }
+
     useEffect(() => {
         let newComissions = [];
         sales.forEach((dat) => {
@@ -26,7 +30,7 @@ export default () => {
                         name: sale.staff.beautician,
                         serviceName: sale.name,
                         perc: sale.fee.beautician,
-                        comission: (sale.price * sale.qty) * sale.fee.beautician / 100
+                        comission: (getDiscountedPrice(sale.price, sale.disc) * sale.qty) * sale.fee.beautician / 100
                     });
                 }
 
@@ -37,7 +41,7 @@ export default () => {
                         name: sale.staff.doctor,
                         serviceName: sale.name,
                         perc: sale.fee.doctor,
-                        comission: (sale.price * sale.qty) * sale.fee.doctor / 100
+                        comission: (getDiscountedPrice(sale.price, sale.disc) * sale.qty) * sale.fee.doctor / 100
                     });
                 }
 
@@ -48,7 +52,7 @@ export default () => {
                         name: sale.staff.nurse,
                         serviceName: sale.name,
                         perc: sale.fee.nurse,
-                        comission: (sale.price * sale.qty) * sale.fee.nurse / 100
+                        comission: (getDiscountedPrice(sale.price, sale.disc) * sale.qty) * sale.fee.nurse / 100
                     });
                 }
             });

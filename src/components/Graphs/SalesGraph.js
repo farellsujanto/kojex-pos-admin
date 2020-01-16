@@ -20,6 +20,10 @@ import {
     Dropdown
 } from "react-bootstrap";
 
+function getDiscountedPrice(price, disc) {
+    return (price * (100 - disc) / 100)
+}
+
 function MonthLineGraph({ currYear, setCurrYear, currMonth, setCurrMonth, decodeMonth, yearGroup, monthGroup, options, data }) {
     return (
         <>
@@ -127,7 +131,7 @@ function SalesGraph() {
     function totalPrice(sales) {
         let price = 0;
         sales.forEach((sale) => {
-            price += (sale.price * sale.qty);
+            price += (getDiscountedPrice(sale.price, sale.disc) * sale.qty);
         });
         return price;
     }
@@ -135,7 +139,7 @@ function SalesGraph() {
     function cleanTotalPrice(sales) {
         let price = 0;
         sales.forEach((sale) => {
-            price += (sale.price * sale.qty) * (100 - sale.fee.beautician - sale.fee.doctor - sale.fee.nurse) / 100;
+            price += (getDiscountedPrice(sale.price, sale.disc) * sale.qty) * (100 - sale.fee.beautician - sale.fee.doctor - sale.fee.nurse) / 100;
         });
         return price;
     }
@@ -173,7 +177,7 @@ function SalesGraph() {
         let dayData = [];
         let cleanDayData = [];
         let dayLabel = [];
-        const dayInMonth = moment(currYear + '-' + (currMonth + 1), "YYYY-MM").daysInMonth();
+        const dayInMonth = moment(currYear + '-' + currMonth, "YYYY-MM").daysInMonth();
         for (let i = 0; i < dayInMonth; i++) {
             dayData.push(0);
             cleanDayData.push(0);
