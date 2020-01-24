@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { SalesContext } from '../store/Context';
 
+import _ from 'lodash';
+
 import {
     Card,
     CardHeader,
-    Col
+    Col,
+    Nav,
+    NavItem,
+    Button
 } from "reactstrap";
 
 import DataTables from '../components/DataTables';
@@ -21,7 +26,6 @@ export default () => {
     useEffect(() => {
         let newComissions = [];
         sales.forEach((dat) => {
-
             dat.sales.forEach((sale) => {
                 if (sale.fee.beautician) {
                     newComissions.push({
@@ -78,15 +82,49 @@ export default () => {
         return output;
     }
 
+    function decodeDate(date) {
+        const newDate = date.split("-");
+        return [newDate[0], newDate[1], newDate[2]];
+    }
+
+    function decodeIndividualDatas() {
+        let mappedDatas = {};
+        comissionDatas.forEach((comissionData) => {
+            const [, m ,y] = decodeDate(comissionData.date);
+
+            const key = m + '-' + y + '#' + comissionData.name;
+
+            if (mappedDatas[key]) {
+                mappedDatas[key] += comissionData.comission;
+            } else {
+                mappedDatas[key] = comissionData.comission;
+            }
+        });
+
+        let output = [[]];
+        Object.keys(mappedDatas).forEach((key, index) => {
+            const [date, name] = key.split("#");
+            output.push([index + 1, date, name, Number(mappedDatas[key]).toLocaleString('id')]);
+        });
+        
+        return output;
+    }
+
     const headers = ["#", "Tanggal", "Nama", "Jasa", "Perc", "Komisi"];
     const suffix = ["", "", "", "", " %", "CURR"];
 
     return (
         <>
             <Col>
+            <Card className="shadow">
+                    <CardHeader className="border-0">
+                        <h3 className="mb-0">Komisi Bulanan</h3>
+                    </CardHeader>
+                    <DataTables items={decodeIndividualDatas} headers={["#", "Bln/ Thn", "Nama", "Total Komisi"]} suffix={["", "", "", ""]} />
+                </Card>
                 <Card className="shadow">
                     <CardHeader className="border-0">
-                        <h3 className="mb-0">Card tables</h3>
+                        <h3 className="mb-0">Seluruh Komisi</h3>
                     </CardHeader>
                     <DataTables items={decodeComissionDatas} headers={headers} suffix={suffix} />
                 </Card>

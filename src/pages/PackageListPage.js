@@ -18,7 +18,7 @@ import {
 } from "reactstrap";
 
 const HEADERS = ["#", "Nama Paket", "Harga", "Barang", ""];
-const SUFFIX = ["", "", "CURR", "", "FUN"];
+const SUFFIX = ["", "", "CURR", "ARR", "FUN"];
 
 
 function PackageListPage() {

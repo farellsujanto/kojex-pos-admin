@@ -131,7 +131,15 @@ function SalesGraph() {
     function totalPrice(sales) {
         let price = 0;
         sales.forEach((sale) => {
-            price += (getDiscountedPrice(sale.price, sale.disc) * sale.qty);
+            if (
+                sale.fee.beautician !== '' &&
+                sale.fee.beautician !== '' &&
+                sale.fee.beautician !== ''
+            ) {
+                price += (getDiscountedPrice(sale.price, sale.disc) * sale.qty);
+            }
+
+            
         });
         return price;
     }
@@ -139,7 +147,14 @@ function SalesGraph() {
     function cleanTotalPrice(sales) {
         let price = 0;
         sales.forEach((sale) => {
-            price += (getDiscountedPrice(sale.price, sale.disc) * sale.qty) * (100 - sale.fee.beautician - sale.fee.doctor - sale.fee.nurse) / 100;
+            if (
+                sale.fee.beautician !== '' &&
+                sale.fee.beautician !== '' &&
+                sale.fee.beautician !== ''
+            ) {
+                price += (getDiscountedPrice(sale.price, sale.disc) * sale.qty) * (100 - sale.fee.beautician - sale.fee.doctor - sale.fee.nurse) / 100;
+            }
+            
         });
         return price;
     }

@@ -40,11 +40,26 @@ function TableRow({ datas, suffix, rowIndex }) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
+    function mapArray(arr) {
+        let output = [];
+        const newArr = JSON.parse(arr);
+        if (newArr) {
+            newArr.forEach((data) => {
+                output.push(data.qty + ' Unit ' + data.name);
+                output.push(<br />);
+            });
+        }
+        return output;
+    }
+
     return (
         <tr>
             {
                 datas ?
                     datas.map((data, index) => {
+                        if (suffix[index] === "ARR") {
+                            return (<td key={index}>{mapArray(data)}</td>);
+                        }
                         if (suffix[index] === "CURR") {
                             return (<td key={index}>{formatNumber(Number(data))}</td>);
                         }
@@ -166,30 +181,30 @@ function DataTables({ items, headers, suffix }) {
             </Row>
             <Row className="mt-3">
                 <Col>
-                <Table striped border="true" hover variant="dark" responsive>
-                    <TableHead
-                        headers={headers}
-                        sortDataByIndex={sortDataByIndex}
-                        sortIndex={sortIndex}
-                        repeatedIndex={repeatedIndex}
-                    />
-                    <TableBody
-                        items={itemsToShow}
-                        entries={entries}
-                        currentPage={currentPage}
-                        suffix={suffix}
-                    />
-                </Table>
+                    <Table striped border="true" hover variant="dark" responsive>
+                        <TableHead
+                            headers={headers}
+                            sortDataByIndex={sortDataByIndex}
+                            sortIndex={sortIndex}
+                            repeatedIndex={repeatedIndex}
+                        />
+                        <TableBody
+                            items={itemsToShow}
+                            entries={entries}
+                            currentPage={currentPage}
+                            suffix={suffix}
+                        />
+                    </Table>
                 </Col>
             </Row>
             <Row>
                 <Col md={4}>
                     Showing {currentPage * entries + 1} to {((currentPage + 1) * entries) > items.length ? items.length : (currentPage + 1) * entries} of {items.length} entries
                 </Col>
-                
+
             </Row>
             <Row>
-            <Col md={4}>
+                <Col md={4}>
                     <ReactPaginate
                         previousLabel={'<'}
                         nextLabel={'>'}
