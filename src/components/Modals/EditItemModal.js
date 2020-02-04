@@ -32,7 +32,8 @@ function EditItemModal({ show, handleClose, itemData }) {
             setSize(itemData.size);
             setPrice(itemData.price)
         }
-    }, [itemData]);
+        console.log(itemData)
+    }, [itemData, show]);
 
     function closeModal() {
         setId('');
