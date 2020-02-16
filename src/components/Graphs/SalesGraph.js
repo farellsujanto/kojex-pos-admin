@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { SalesContext } from '../../store/Context';
 
 import moment from 'moment';
@@ -52,7 +52,7 @@ function MonthLineGraph({ currYear, setCurrYear, currMonth, setCurrMonth, decode
                                 (
                                     <Dropdown>
                                         <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                            {currMonth ? decodeMonth(currMonth) : 'Pilih Bulan'}
+                                            {currMonth === 0 ? decodeMonth(currMonth) : currMonth ? decodeMonth(currMonth) : 'Pilih Bulan'}
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
@@ -125,21 +125,13 @@ function SalesGraph() {
 
     function getDateData(date) {
         const result = date.split("-");
-        return [Number(result[0]), Number(result[1]), Number(result[2])];
+        return [Number(result[0]), Number(result[1]) - 1, Number(result[2])];
     }
 
     function totalPrice(sales) {
         let price = 0;
         sales.forEach((sale) => {
-            if (
-                sale.fee.beautician !== '' &&
-                sale.fee.beautician !== '' &&
-                sale.fee.beautician !== ''
-            ) {
-                price += (getDiscountedPrice(sale.price, sale.disc) * sale.qty);
-            }
-
-            
+            price += (getDiscountedPrice(sale.price, sale.disc) * sale.qty);
         });
         return price;
     }
@@ -148,13 +140,14 @@ function SalesGraph() {
         let price = 0;
         sales.forEach((sale) => {
             if (
-                sale.fee.beautician !== '' &&
-                sale.fee.beautician !== '' &&
-                sale.fee.beautician !== ''
+                sale.fee.beautician ||
+                sale.fee.nurse ||
+                sale.fee.doctor
             ) {
                 price += (getDiscountedPrice(sale.price, sale.disc) * sale.qty) * (100 - sale.fee.beautician - sale.fee.doctor - sale.fee.nurse) / 100;
+            } else {
+                price += (getDiscountedPrice(sale.price, sale.disc) * sale.qty);
             }
-            
         });
         return price;
     }
@@ -192,7 +185,8 @@ function SalesGraph() {
         let dayData = [];
         let cleanDayData = [];
         let dayLabel = [];
-        const dayInMonth = moment(currYear + '-' + currMonth, "YYYY-MM").daysInMonth();
+        const dayInMonth = moment(currYear + '-' + currMonth + 1, "YYYY-MM").daysInMonth();
+        
         for (let i = 0; i < dayInMonth; i++) {
             dayData.push(0);
             cleanDayData.push(0);
@@ -206,6 +200,7 @@ function SalesGraph() {
                 cleanDayData[day] = cleanDayData[day] + cleanTotalPrice(salesData.sales);
             }
         });
+        console.log(dayInMonth, dayData)
 
         const chartData = {
             labels: dayLabel,
@@ -267,6 +262,7 @@ function SalesGraph() {
         sales.forEach((salesData) => {
             const [, mon, yr] = getDateData(salesData.date);
             if (yr === currYear) {
+                
                 yearData[mon] = yearData[mon] + totalPrice(salesData.sales);
                 cleanYearData[mon] = cleanYearData[mon] + cleanTotalPrice(salesData.sales);
             }
